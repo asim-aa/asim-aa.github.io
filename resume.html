@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asim Ahmed — Résumé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181d;
+    --ink-soft:#3d434d;
+    --ink-faint:#6b7280;
+    --rule:#c9ced6;
+    --accent:#1a4b8c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#e9ecf0;
+    font-family:'Source Sans 3','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    line-height:1.34;
+    padding:28px 16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .toolbar{
+    max-width:8.5in;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:10px;
+  }
+  .toolbar button, .toolbar a{
+    font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+    background:var(--accent);color:#fff;border:none;
+    padding:8px 16px;border-radius:6px;text-decoration:none;
+  }
+  .toolbar a{background:#fff;color:var(--accent);border:1px solid var(--rule)}
+
+  .page{
+    max-width:8.5in;margin:0 auto;background:#fff;
+    padding:0.42in 0.58in;
+    box-shadow:0 2px 18px rgba(0,0,0,.13);
+    font-size:9.15pt;
+  }
+
+  /* header */
+  .name{font-size:21pt;font-weight:700;letter-spacing:-.02em;line-height:1.05;text-align:center}
+  .tagline{
+    text-align:center;font-size:9.6pt;color:var(--ink-soft);
+    margin-top:3px;font-weight:600;letter-spacing:.005em;
+  }
+  .contact{
+    text-align:center;font-size:9pt;color:var(--ink-soft);margin-top:5px;
+  }
+  .contact a{color:var(--accent);text-decoration:none}
+  .contact span{white-space:nowrap}
+  .sep{color:var(--rule);margin:0 7px}
+
+  /* sections */
+  h2{
+    font-size:9.5pt;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--ink);border-bottom:1.4px solid var(--ink);
+    padding-bottom:2px;margin:9.5px 0 5px;
+  }
+
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+  .org{font-weight:700;font-size:10pt}
+  .when{font-size:8.8pt;color:var(--ink-faint);white-space:nowrap;font-weight:600}
+  .sub{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:9pt;font-style:italic;color:var(--ink-soft)}
+  .edu-block{margin-bottom:6px}
+  .edu-block:last-child{margin-bottom:0}
+  .course{font-size:8.7pt;color:var(--ink-soft);margin-top:1px}
+  .course b{color:var(--ink);font-style:normal;font-weight:600}
+
+  /* skills */
+  .skill-row{display:flex;gap:8px;margin-bottom:2.2px;font-size:8.8pt;align-items:baseline}
+  .skill-key{font-weight:700;flex:0 0 108px;color:var(--ink)}
+  .skill-val{color:var(--ink-soft)}
+
+  /* projects */
+  .proj{margin-bottom:6.5px;break-inside:avoid}
+  .proj:last-child{margin-bottom:0}
+  .proj-name{font-weight:700;font-size:10pt}
+  .stack{font-size:8.5pt;font-style:italic;color:var(--ink-faint);margin:1px 0 3px}
+  ul{list-style:none;padding-left:0}
+  li{
+    position:relative;padding-left:13px;margin-bottom:1.9px;
+    font-size:8.8pt;color:var(--ink-soft);line-height:1.32;
+  }
+  li::before{
+    content:'';position:absolute;left:2px;top:.52em;
+    width:3.5px;height:3.5px;border-radius:50%;background:var(--ink-faint);
+  }
+  li b{color:var(--ink);font-weight:700}
+  .lead{color:var(--ink);font-weight:700}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .toolbar{display:none}
+    .page{box-shadow:none;max-width:none;padding:0.42in 0.55in;margin:0}
+    a{color:var(--accent)!important}
+  }
+  @page{size:letter;margin:0}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="index.html">← Portfolio</a>
+  <button onclick="window.print()">Download as PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="name">Asim Ahmed</div>
+  <div class="tagline">Machine Learning &amp; Data Science</div>
+  <div class="contact">
+    <span>San Diego, CA</span><span class="sep">|</span>
+    <span><a href="mailto:asa009@ucsd.edu">asa009@ucsd.edu</a></span><span class="sep">|</span>
+    <span>925-968-5430</span><span class="sep">|</span>
+    <span><a href="https://github.com/asim-aa">github.com/asim-aa</a></span><span class="sep">|</span>
+    <span><a href="https://www.linkedin.com/in/asim-ahmed-129450365/">LinkedIn</a></span>
+  </div>
+
+  <h2>Education</h2>
+  <div class="edu-block">
+    <div class="row">
+      <span class="org">University of California, San Diego</span>
+      <span class="when">Expected Mar. 2027</span>
+    </div>
+    <div class="sub">
+      <span>B.S. Mathematics–Computer Science, Minor in Cognitive Science</span>
+      <span style="font-style:normal;font-size:8.8pt">Provost Honors, Spring 2025</span>
+    </div>
+    <div class="course">
+      <b>Relevant Coursework:</b> Advanced Machine Learning Methods, Supervised Machine Learning,
+      Artificial Intelligence, Statistical NLP, Data Analysis and Inference, Probability
+    </div>
+  </div>
+  <div class="edu-block">
+    <div class="row">
+      <span class="org">Las Positas College</span>
+      <span class="when">Jun. 2024</span>
+    </div>
+    <div class="sub"><span>A.S. Mathematics and Computer Science</span></div>
+  </div>
+
+  <h2>Technical Skills</h2>
+  <div class="skill-row"><span class="skill-key">Languages</span><span class="skill-val">Python, SQL, R</span></div>
+  <div class="skill-row"><span class="skill-key">Machine Learning</span><span class="skill-val">scikit-learn, CatBoost, PyTorch, Neural Networks, GRUs, Conformal Prediction, Feature Engineering, Model Evaluation</span></div>
+  <div class="skill-row"><span class="skill-key">Data &amp; Analytics</span><span class="skill-val">pandas, NumPy, DuckDB, SQLite, Tableau, Plotly, Statistical Analysis, Data Validation</span></div>
+  <div class="skill-row"><span class="skill-key">Generative AI</span><span class="skill-val">OpenAI SDK, Google ADK, LangGraph, LiteLLM, vLLM, Multi-Agent Workflows, Structured Outputs, Tool Calling</span></div>
+  <div class="skill-row"><span class="skill-key">Engineering</span><span class="skill-val">REST APIs, FastAPI, Streamlit, Pydantic, Git, GitHub Actions, pytest, Ruff, Jupyter, Excel</span></div>
+
+  <h2>Projects</h2>
+
+  <div class="proj">
+    <div class="row">
+      <span class="proj-name">NBA Win-Probability Prediction Platform</span>
+      <span class="when">Aug. 2026</span>
+    </div>
+    <div class="stack">Python, pandas, scikit-learn, CatBoost, FastAPI, Streamlit, SQLite, pytest, Ruff, GitHub Actions</div>
+    <ul>
+      <li><span class="lead">Reached 0.738 ROC-AUC and 67.8% accuracy on a frozen 2,460-game test set</span> — built an 11-season pipeline with chronological splitting, a custom Elo engine, and a leakage-safe roster-continuity feature proxying player injuries from game logs; selected logistic regression over CatBoost.</li>
+      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games — hidden by the aggregate accuracy number — via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks.</li>
+      <li><span class="lead">Shipped to production behind 312 automated tests</span>, deploying a FastAPI prediction service and Streamlit dashboard on a shared feature-computation and serving layer, with scheduled CI keeping live features current.</li>
+    </ul>
+  </div>
+
+  <div class="proj">
+    <div class="row">
+      <span class="proj-name">Multi-Agent Vacation Planner</span>
+      <span class="when">Aug. 2026</span>
+    </div>
+    <div class="stack">Python, LangGraph, Streamlit, OpenAI SDK, pytest, GitHub Actions</div>
+    <ul>
+      <li><span class="lead">Migrated a mock-data prototype to four live, keyless data sources at zero API cost</span> — architecting a LangGraph system with parallel flight/activity search, a budget-dependent sequential hotel stage, and a final itinerary compiler.</li>
+      <li><span class="lead">Cut repeat search latency from 1.15s to 0.00s</span> with a TTL cache, and eliminated hallucinated place names using a fact-checking guard that cross-references LLM output against ground-truth data.</li>
+      <li><span class="lead">Diagnosed and patched a silent data-loss bug</span> in a third-party scraping library that discarded valid results, and built an offline airport-disambiguation resolver with hub-connection fallback; backed by 102 tests, CI, and a public Streamlit deployment.</li>
+    </ul>
+  </div>
+
+  <div class="proj">
+    <div class="row">
+      <span class="proj-name">Uncertainty-Aware Marketplace Pricing Analysis</span>
+      <span class="when">Jul. 2026</span>
+    </div>
+    <div class="stack">Python, pandas, scikit-learn, CatBoost, Conformal Prediction, Tableau, pytest, Ruff</div>
+    <ul>
+      <li><span class="lead">Reduced test MAE by 30.2% versus the strongest stable baseline</span>, reaching $3,516 MAE on 41,746 held-out listings after comparing global median, hierarchical segment, Ridge, and CatBoost models.</li>
+      <li><span class="lead">Built a reproducible pipeline over 426,880 Craigslist vehicle listings</span> with 21-feature engineering, chronological splitting, and VIN-based leakage controls.</li>
+      <li><span class="lead">Identified severe undercoverage in $50K+ vehicles</span> through split conformal prediction and subgroup reliability audits, measuring 87.88% coverage against a nominal 90% target; published an interactive Tableau dashboard backed by 75 tests.</li>
+    </ul>
+  </div>
+
+  <div class="proj">
+    <div class="row">
+      <span class="proj-name">GroundedIQ — Evidence-Grounded Analytics Copilot</span>
+      <span class="when">Jul. 2026</span>
+    </div>
+    <div class="stack">Python, SQL, DuckDB, pandas, Streamlit, Plotly, Pydantic, OpenAI SDK, pytest, Ruff</div>
+    <ul>
+      <li><span class="lead">Converted natural-language business questions into deterministic SQL and Python analyses</span> with evidence-backed summaries and explicit warnings, rather than free-form model output.</li>
+      <li><span class="lead">Integrated seven Olist datasets into a validated 112,650-row DuckDB analytical model</span> with schema checks, explicit table grain, and safeguards against invalid aggregation.</li>
+      <li><span class="lead">Delivered KPI reporting, trend visualizations, and conversational follow-up rewriting</span>, supported by 40 automated tests.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
