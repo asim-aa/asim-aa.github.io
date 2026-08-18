@@ -1,0 +1,16 @@
+# Search engines: welcome.
+User-agent: *
+Allow: /
+Disallow: /.well-known/
+
+# Known contact/email scrapers — declined.
+User-agent: EmailCollector
+Disallow: /
+User-agent: EmailSiphon
+Disallow: /
+User-agent: ExtractorPro
+Disallow: /
+User-agent: WebEMailExtrac
+Disallow: /
+
+Sitemap: https://asim-aa.github.io/sitemap.xml
