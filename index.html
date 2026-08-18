@@ -2,230 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Asim Ahmed — Machine Learning &amp; Data Science</title>
 <meta name="description" content="Asim Ahmed — Mathematics–Computer Science at UC San Diego. Machine learning, data science, and applied AI systems: win-probability modeling, conformal prediction, multi-agent LLM workflows.">
 <meta property="og:title" content="Asim Ahmed — Machine Learning & Data Science">
 <meta property="og:description" content="Math–CS at UC San Diego. Building measurable ML systems: calibrated prediction, uncertainty quantification, and evidence-grounded AI.">
 <meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0b0f14;
-    --bg-soft:#111721;
-    --bg-card:#131a24;
-    --line:#212b38;
-    --line-soft:#1a222d;
-    --text:#e6edf5;
-    --text-dim:#9aa9bb;
-    --text-faint:#697a8f;
-    --accent:#4da3ff;
-    --accent-soft:#1d3a5c;
-    --accent-glow:rgba(77,163,255,.13);
-    --green:#3ddc97;
-    --amber:#f5b544;
-    --radius:14px;
-    --maxw:1080px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter',system-ui,-apple-system,sans-serif;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
-  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
-
-  /* ---------- nav ---------- */
-  nav{
-    position:sticky;top:0;z-index:50;
-    background:rgba(11,15,20,.82);
-    backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line-soft);
-  }
-  .nav-in{
-    max-width:var(--maxw);margin:0 auto;padding:14px 28px;
-    display:flex;align-items:center;justify-content:space-between;gap:20px;
-  }
-  .nav-brand{font-weight:600;font-size:15px;letter-spacing:-.01em}
-  .nav-brand span{color:var(--accent)}
-  .nav-links{display:flex;gap:26px;font-size:14px;color:var(--text-dim)}
-  .nav-links a{transition:color .2s}
-  .nav-links a:hover{color:var(--text)}
-  @media(max-width:680px){.nav-links{display:none}}
-
-  /* ---------- hero ---------- */
-  header{
-    padding:104px 0 78px;
-    position:relative;
-    border-bottom:1px solid var(--line-soft);
-  }
-  header::before{
-    content:'';position:absolute;inset:0;
-    background:radial-gradient(720px 340px at 12% -8%, var(--accent-glow), transparent 70%);
-    pointer-events:none;
-  }
-  .eyebrow{
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:10px;
-  }
-  .eyebrow::after{content:'';height:1px;width:52px;flex:none;background:linear-gradient(90deg,var(--accent),transparent)}
-  @media(max-width:520px){.eyebrow::after{display:none}}
-  h1{
-    font-size:clamp(38px,6.4vw,64px);
-    line-height:1.05;letter-spacing:-.035em;font-weight:700;margin-bottom:22px;
-  }
-  .lede{
-    font-size:clamp(16px,2.1vw,19px);color:var(--text-dim);
-    max-width:660px;margin-bottom:34px;
-  }
-  .lede strong{color:var(--text);font-weight:500}
-  .hero-meta{
-    display:flex;flex-wrap:wrap;gap:10px 22px;
-    font-size:13.5px;color:var(--text-faint);margin-bottom:34px;
-  }
-  .hero-meta span{display:flex;align-items:center;gap:7px}
-  .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
-  .cta-row{display:flex;flex-wrap:wrap;gap:12px}
-  .btn{
-    display:inline-flex;align-items:center;gap:9px;
-    padding:11px 20px;border-radius:9px;font-size:14.5px;font-weight:500;
-    border:1px solid var(--line);transition:all .2s;
-  }
-  .btn-primary{background:var(--accent);color:#04101f;border-color:var(--accent);font-weight:600}
-  .btn-primary:hover{background:#6fb6ff;border-color:#6fb6ff;transform:translateY(-1px)}
-  .btn-ghost{color:var(--text-dim);background:var(--bg-soft)}
-  .btn-ghost:hover{color:var(--text);border-color:#31404f;transform:translateY(-1px)}
-
-  /* ---------- sections ---------- */
-  section{padding:78px 0;border-bottom:1px solid var(--line-soft)}
-  .sec-head{margin-bottom:44px}
-  .sec-num{
-    font-size:12px;letter-spacing:.12em;color:var(--accent);
-    text-transform:uppercase;margin-bottom:12px;
-  }
-  h2{font-size:clamp(25px,3.6vw,33px);letter-spacing:-.028em;font-weight:650;margin-bottom:12px}
-  .sec-sub{color:var(--text-dim);font-size:15.5px;max-width:620px}
-
-  /* ---------- project cards ---------- */
-  .projects{display:flex;flex-direction:column;gap:22px}
-  .card{
-    background:var(--bg-card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:30px;
-    transition:border-color .25s, transform .25s;
-    position:relative;overflow:hidden;
-  }
-  .card::before{
-    content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-    background:linear-gradient(180deg,var(--accent),transparent);
-    opacity:0;transition:opacity .25s;
-  }
-  .card:hover{border-color:#2e3f52;transform:translateY(-2px)}
-  .card:hover::before{opacity:1}
-  .card-top{
-    display:flex;justify-content:space-between;align-items:flex-start;
-    gap:20px;flex-wrap:wrap;margin-bottom:8px;
-  }
-  .card h3{font-size:20.5px;letter-spacing:-.02em;font-weight:640}
-  .card-date{font-size:12.5px;color:var(--text-faint);white-space:nowrap;padding-top:4px}
-  .card-role{color:var(--accent);font-size:13.5px;font-weight:500;margin-bottom:16px}
-  .card p{color:var(--text-dim);font-size:15px;margin-bottom:20px;max-width:76ch}
-
-  .metrics{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
-  .metric{
-    background:var(--bg-soft);border:1px solid var(--line);
-    border-radius:8px;padding:9px 14px;min-width:0;
-  }
-  .metric-val{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.01em;display:block}
-  .metric-lbl{font-size:11px;color:var(--text-faint);letter-spacing:.03em;text-transform:uppercase}
-
-  .stack{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
-  .chip{
-    font-size:11.5px;padding:4px 10px;border-radius:20px;
-    background:rgba(77,163,255,.07);border:1px solid rgba(77,163,255,.18);
-    color:#a8c9ee;letter-spacing:.01em;
-  }
-  .card-links{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;padding-top:18px;border-top:1px solid var(--line-soft)}
-  .card-links a{color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:opacity .2s}
-  .card-links a:hover{opacity:.72}
-  .card-links a::after{content:'↗';font-size:11px;opacity:.65}
-
-  /* ---------- more grid ---------- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
-  .mini{
-    background:var(--bg-soft);border:1px solid var(--line-soft);
-    border-radius:11px;padding:20px;transition:border-color .2s,transform .2s;
-    display:flex;flex-direction:column;gap:8px;
-  }
-  .mini:hover{border-color:#2b3a4a;transform:translateY(-2px)}
-  .mini h4{font-size:15px;font-weight:580;letter-spacing:-.012em}
-  .mini p{font-size:13.5px;color:var(--text-faint);line-height:1.55;flex:1}
-  .mini .lang{font-size:11.5px;color:var(--accent);letter-spacing:.02em}
-
-  /* ---------- skills ---------- */
-  .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:26px}
-  .skill-group h4{
-    font-size:12px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--text-faint);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line-soft);
-  }
-  .skill-list{display:flex;flex-wrap:wrap;gap:7px}
-  .skill{
-    font-size:13px;color:var(--text-dim);background:var(--bg-soft);
-    border:1px solid var(--line-soft);padding:5px 11px;border-radius:7px;
-  }
-
-  /* ---------- education ---------- */
-  .edu-item{
-    display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
-    padding:22px 0;border-bottom:1px solid var(--line-soft);
-  }
-  .edu-item:last-of-type{border-bottom:none}
-  .edu-item h4{font-size:17.5px;font-weight:600;letter-spacing:-.015em;margin-bottom:5px}
-  .edu-item .deg{color:var(--text-dim);font-size:14.5px;margin-bottom:9px}
-  .edu-item .when{color:var(--text-faint);font-size:13.5px;white-space:nowrap}
-  .coursework{font-size:13.5px;color:var(--text-faint);max-width:62ch}
-  .coursework b{color:var(--text-dim);font-weight:500}
-  .honor{
-    display:inline-block;margin-top:9px;font-size:12px;
-    color:var(--amber);border:1px solid rgba(245,181,68,.28);
-    background:rgba(245,181,68,.07);padding:3px 10px;border-radius:20px;
-  }
-
-  /* ---------- contact ---------- */
-  .contact-box{
-    background:linear-gradient(135deg,var(--bg-card),var(--bg-soft));
-    border:1px solid var(--line);border-radius:var(--radius);
-    padding:44px 36px;text-align:center;
-  }
-  .contact-box h2{margin-bottom:14px}
-  .contact-box p{color:var(--text-dim);max-width:520px;margin:0 auto 28px;font-size:15.5px}
-  .contact-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-
-  footer{padding:34px 0;text-align:center;color:var(--text-faint);font-size:13px}
-
-  /* ---------- reveal ---------- */
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){
-    .reveal{opacity:1;transform:none;transition:none}
-    html{scroll-behavior:auto}
-  }
-  @media(max-width:640px){
-    header{padding:70px 0 56px}
-    section{padding:58px 0}
-    .card{padding:24px 20px}
-    .contact-box{padding:34px 22px}
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -260,8 +46,8 @@
     </div>
     <div class="cta-row">
       <a class="btn btn-primary" href="#work">View selected work</a>
-      <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a class="btn btn-ghost" href="mailto:asa009@ucsd.edu">Email</a>
     </div>
   </div>
@@ -306,7 +92,7 @@
           <span class="chip">pytest</span><span class="chip">GitHub Actions</span>
         </div>
         <div class="card-links">
-          <a href="https://github.com/asim-aa/nba-intelligence-platform" target="_blank" rel="noopener">Source</a>
+          <a href="https://github.com/asim-aa/nba-intelligence-platform" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
 
@@ -335,8 +121,8 @@
           <span class="chip">Streamlit</span><span class="chip">pytest</span><span class="chip">GitHub Actions</span>
         </div>
         <div class="card-links">
-          <a href="https://vacation-planner-agent-hybzvttaeapp48zwno5wshm.streamlit.app/" target="_blank" rel="noopener">Live demo</a>
-          <a href="https://github.com/asim-aa/vacation-planner-agent" target="_blank" rel="noopener">Source</a>
+          <a href="https://vacation-planner-agent-hybzvttaeapp48zwno5wshm.streamlit.app/" target="_blank" rel="noopener noreferrer">Live demo</a>
+          <a href="https://github.com/asim-aa/vacation-planner-agent" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
 
@@ -365,7 +151,7 @@
           <span class="chip">Ruff</span>
         </div>
         <div class="card-links">
-          <a href="https://github.com/asim-aa/marketplace-pricing-analysis" target="_blank" rel="noopener">Source</a>
+          <a href="https://github.com/asim-aa/marketplace-pricing-analysis" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
 
@@ -393,7 +179,7 @@
           <span class="chip">Plotly</span>
         </div>
         <div class="card-links">
-          <a href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener">Source</a>
+          <a href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
 
@@ -409,32 +195,32 @@
       <p class="sec-sub">Smaller projects from coursework and self-directed exploration.</p>
     </div>
     <div class="grid">
-      <a class="mini reveal" href="https://github.com/asim-aa/cogs118a-final-project" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/cogs118a-final-project" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python</div>
         <h4>ML Benchmark Study</h4>
         <p>SVM, Random Forest, and MLP compared across 3 UCI datasets over 81 controlled experiments.</p>
       </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/cogs185-char-rnn-project" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/cogs185-char-rnn-project" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python · PyTorch</div>
         <h4>Character-Level RNN</h4>
         <p>Sequence modeling project exploring recurrent architectures for character-level generation.</p>
       </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/bundesliga-player-valuation" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/bundesliga-player-valuation" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python</div>
         <h4>Bundesliga Player Valuation</h4>
         <p>Data science project modeling transfer-market value for Bundesliga footballers.</p>
       </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python</div>
         <h4>Spotify Taste Pipeline</h4>
         <p>Personal listening-data ETL and analysis pipeline built on the Spotify Web API.</p>
       </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/fuel-economy-inference" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/fuel-economy-inference" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">R</div>
         <h4>Fuel Economy Inference</h4>
         <p>Statistical inference study on vehicle fuel-economy data, written in R.</p>
       </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/multi-agent-assistant" target="_blank" rel="noopener">
+      <a class="mini reveal" href="https://github.com/asim-aa/multi-agent-assistant" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python</div>
         <h4>Multi-Agent Assistant</h4>
         <p>Earlier exploration of agent orchestration patterns that fed into the Vacation Planner.</p>
@@ -520,7 +306,7 @@
   </div>
 </section>
 
-<section id="contact" style="border-bottom:none">
+<section id="contact" class="no-rule">
   <div class="wrap">
     <div class="contact-box reveal">
       <h2>Let's talk</h2>
@@ -530,9 +316,9 @@
       </p>
       <div class="contact-links">
         <a class="btn btn-primary" href="mailto:asa009@ucsd.edu">asa009@ucsd.edu</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn btn-ghost" href="resume.html" target="_blank" rel="noopener">Résumé</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="btn btn-ghost" href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
       </div>
     </div>
   </div>
@@ -542,16 +328,6 @@
   <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
 </footer>
 
-<script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach((el, i) => {
-    el.style.transitionDelay = (Math.min(i, 4) * 60) + 'ms';
-    io.observe(el);
-  });
-</script>
+<script src="app.js" defer></script>
 </body>
 </html>
