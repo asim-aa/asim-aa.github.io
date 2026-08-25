@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Lab — Asim Ahmed</title>
+<meta name="description" content="Papers, courses, and videos Asim Ahmed has used to learn machine learning, LLMs, and AI agents — with notes on where each one got applied.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html" class="active">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">Learning Lab</div>
+    <h1>What I've been reading &amp; watching</h1>
+    <p class="lede">
+      Papers, courses, and videos I've actually used to close specific gaps — not a reading list
+      for its own sake. Each entry says why it helped and, where it applies, which project it
+      showed up in.
+    </p>
+    <p class="note reveal">
+      A few entries below are placeholders marking the shape of this page — I'm filling in the
+      real list next. The CME295 entry is current and accurate.
+    </p>
+  </div>
+</header>
+
+<section class="no-rule">
+  <div class="wrap">
+    <div class="filter-bar reveal" data-filter-bar="[data-cats]">
+      <button class="filter-btn active" data-cat="all" type="button">All</button>
+      <button class="filter-btn" data-cat="ml" type="button">Machine Learning</button>
+      <button class="filter-btn" data-cat="llm" type="button">LLMs &amp; Transformers</button>
+      <button class="filter-btn" data-cat="agents" type="button">AI Agents</button>
+      <button class="filter-btn" data-cat="data-science" type="button">Data Science</button>
+      <button class="filter-btn" data-cat="swe" type="button">Software Engineering</button>
+      <button class="filter-btn" data-cat="math" type="button">Mathematics</button>
+      <button class="filter-btn" data-cat="current" type="button">Currently Learning</button>
+    </div>
+
+    <div class="res-grid">
+
+      <div class="res-card reveal" data-cats="llm current">
+        <div class="res-top">
+          <span class="res-type res-type-video">Video Course</span>
+          <span class="res-diff">Intermediate</span>
+        </div>
+        <h4>CME295 — Transformers &amp; LLMs from Scratch</h4>
+        <div class="res-topic">Stanford · YouTube · LLMs &amp; Transformers</div>
+        <p>Working through this to close gaps in transformer internals — attention mechanics, positional encoding, and training dynamics — ahead of ML engineer interviews. Pre-loading backprop chain mechanics before video 1 turned out to matter.</p>
+        <div class="res-applied">Currently studying — closing gaps before interview prep</div>
+      </div>
+
+      <div class="res-card reveal" data-cats="agents llm placeholder" data-placeholder="true">
+        <div class="res-top">
+          <span class="res-type res-type-video">Video</span>
+          <span class="res-diff">Intermediate</span>
+        </div>
+        <h4>When the Loop Becomes the Machine <span class="ph-tag">placeholder</span></h4>
+        <div class="res-topic">Lecture · AI Agents</div>
+        <p>Helped clarify that an agent is the model plus its surrounding harness — tools, memory, verification, and control flow — not just a bigger prompt.</p>
+        <div class="res-applied">Applied in: <a href="project-vacation.html">Multi-Agent Vacation Planner</a></div>
+      </div>
+
+      <div class="res-card reveal" data-cats="ml placeholder" data-placeholder="true">
+        <div class="res-top">
+          <span class="res-type res-type-paper">Paper</span>
+          <span class="res-diff">Advanced</span>
+        </div>
+        <h4>Conformal Prediction: A Gentle Introduction <span class="ph-tag">placeholder</span></h4>
+        <div class="res-topic">Paper · Machine Learning</div>
+        <p>Clarified the distinction between marginal and conditional coverage — which is exactly the gap that showed up as undercoverage on high-value vehicles.</p>
+        <div class="res-applied">Applied in: <a href="project-pricing.html">Marketplace Pricing Analysis</a></div>
+      </div>
+
+      <div class="res-card reveal" data-cats="data-science placeholder" data-placeholder="true">
+        <div class="res-top">
+          <span class="res-type res-type-article">Article</span>
+          <span class="res-diff">Beginner</span>
+        </div>
+        <h4>Backtesting Without Lying to Yourself <span class="ph-tag">placeholder</span></h4>
+        <div class="res-topic">Article · Data Science</div>
+        <p>A clear walkthrough of why chronological, walk-forward splits matter for anything with a time axis — random splits quietly leak the future into the past.</p>
+        <div class="res-applied">Applied in: <a href="project-nba.html">NBA Win-Probability Platform</a></div>
+      </div>
+
+      <div class="res-card reveal" data-cats="swe placeholder" data-placeholder="true">
+        <div class="res-top">
+          <span class="res-type res-type-course">Course</span>
+          <span class="res-diff">Intermediate</span>
+        </div>
+        <h4>Testing Data Pipelines Properly <span class="ph-tag">placeholder</span></h4>
+        <div class="res-topic">Course · Software Engineering</div>
+        <p>Pushed me to write tests for the failure modes of a pipeline, not just its happy path — the parsing-bug fix in the Vacation Planner came out of applying this directly.</p>
+        <div class="res-applied">Applied in: <a href="project-vacation.html">Multi-Agent Vacation Planner</a></div>
+      </div>
+
+      <div class="res-card reveal" data-cats="math placeholder" data-placeholder="true">
+        <div class="res-top">
+          <span class="res-type res-type-book">Book</span>
+          <span class="res-diff">Advanced</span>
+        </div>
+        <h4>Numerical Linear Algebra Notes <span class="ph-tag">placeholder</span></h4>
+        <div class="res-topic">Reference · Mathematics</div>
+        <p>SVD, QR, and condition numbers explained with enough rigor to actually reason about when a numerical method will be unstable, not just how to call it.</p>
+        <div class="res-applied">Applied in: coursework (MATH 170A)</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="no-rule">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <h2>Let's talk</h2>
+      <p>Looking for machine learning, data science, and analytics roles across California.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:asa009@ucsd.edu">asa009@ucsd.edu</a>
+        <a class="btn btn-ghost" href="contact.html">All contact info →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

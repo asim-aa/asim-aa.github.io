@@ -17,13 +17,17 @@
 
 <nav>
   <div class="nav-in">
-    <div class="nav-brand">Asim Ahmed<span>.</span></div>
-    <div class="nav-links">
-      <a href="#work">Work</a>
-      <a href="#more">More</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-      <a href="#contact">Contact</a>
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
     </div>
   </div>
 </nav>
@@ -46,7 +50,7 @@
         <span>B.S. expected Mar 2027</span>
       </div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#work">View selected work</a>
+        <a class="btn btn-primary" href="projects.html">View selected work</a>
         <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a class="btn btn-ghost" href="mailto:asa009@ucsd.edu">Email</a>
@@ -97,11 +101,11 @@
 <section id="work">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-num">01 — Selected Work</div>
-      <h2>Four systems, end to end</h2>
+      <div class="sec-num">01 — Featured Work</div>
+      <h2>Three systems, end to end</h2>
       <p class="sec-sub">
-        Each of these went from raw data to a tested, deployed artifact. The numbers below are
-        measured on held-out data, not training performance.
+        A sample of what's on the Projects page — each went from raw data to a tested, deployed
+        artifact. Numbers below are measured on held-out data, not training performance.
       </p>
     </div>
 
@@ -115,24 +119,21 @@
         <div class="card-role">Modeling · Feature engineering · Production serving</div>
         <p>
           An 11-season pregame win-probability pipeline with chronological splitting, a custom Elo
-          engine, and a leakage-safe roster-continuity feature that proxies player injuries from game
-          logs. Logistic regression was selected over CatBoost after evaluation. A walk-forward
-          backtest across 8 season cutoffs and a live calibration monitor exposed a
-          <b>1.7× calibration-error gap</b> between back-to-back and rested games that the aggregate
-          accuracy number completely hid.
+          engine, and a leakage-safe roster-continuity feature that proxies player injuries. A
+          walk-forward backtest exposed a <b>1.7× calibration-error gap</b> between back-to-back and
+          rested games that the aggregate accuracy number completely hid.
         </p>
         <div class="metrics">
           <div class="metric"><span class="metric-val mono">0.738</span><span class="metric-lbl">ROC-AUC</span></div>
           <div class="metric"><span class="metric-val mono">67.8%</span><span class="metric-lbl">Test accuracy</span></div>
-          <div class="metric"><span class="metric-val mono">2,460</span><span class="metric-lbl">Frozen test games</span></div>
           <div class="metric"><span class="metric-val mono">312</span><span class="metric-lbl">Automated tests</span></div>
         </div>
         <div class="stack">
           <span class="chip">Python</span><span class="chip">scikit-learn</span><span class="chip">CatBoost</span>
-          <span class="chip">FastAPI</span><span class="chip">Streamlit</span><span class="chip">SQLite</span>
-          <span class="chip">pytest</span><span class="chip">GitHub Actions</span>
+          <span class="chip">FastAPI</span><span class="chip">Streamlit</span>
         </div>
         <div class="card-links">
+          <a href="project-nba.html">Read case study</a>
           <a href="https://github.com/asim-aa/nba-intelligence-platform" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
@@ -144,24 +145,21 @@
         </div>
         <div class="card-role">Multi-agent orchestration · LLM reliability engineering</div>
         <p>
-          A LangGraph trip-planning system with parallel flight and activity search, a budget-dependent
-          sequential hotel stage, and a final itinerary compiler — migrated from a mock-data prototype
-          to <b>four live, keyless data sources at zero API cost</b>. I diagnosed and patched a parsing
-          bug in a third-party scraping library that silently discarded valid results, built an offline
-          airport-disambiguation resolver with hub-connection fallback, and added a fact-checking guard
-          that cross-references LLM output against ground truth to stop hallucinated place names.
+          A LangGraph trip-planning system with parallel search and a budget-dependent sequential
+          hotel stage — migrated from a mock-data prototype to <b>four live, keyless data sources
+          at zero API cost</b>, with a fact-checking guard that stops hallucinated place names.
         </p>
         <div class="metrics">
           <div class="metric"><span class="metric-val mono">1.15s → 0.00s</span><span class="metric-lbl">Repeat search latency</span></div>
-          <div class="metric"><span class="metric-val mono">4</span><span class="metric-lbl">Live keyless sources</span></div>
           <div class="metric"><span class="metric-val mono">$0</span><span class="metric-lbl">API cost</span></div>
           <div class="metric"><span class="metric-val mono">102</span><span class="metric-lbl">Automated tests</span></div>
         </div>
         <div class="stack">
           <span class="chip">Python</span><span class="chip">LangGraph</span><span class="chip">OpenAI SDK</span>
-          <span class="chip">Streamlit</span><span class="chip">pytest</span><span class="chip">GitHub Actions</span>
+          <span class="chip">Streamlit</span>
         </div>
         <div class="card-links">
+          <a href="project-vacation.html">Read case study</a>
           <a href="https://vacation-planner-agent-hybzvttaeapp48zwno5wshm.streamlit.app/" target="_blank" rel="noopener noreferrer">Live demo</a>
           <a href="https://github.com/asim-aa/vacation-planner-agent" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
@@ -174,175 +172,69 @@
         </div>
         <div class="card-role">Applied statistics · Conformal prediction · Reliability auditing</div>
         <p>
-          A reproducible pricing pipeline over <b>426,880 Craigslist vehicle listings</b> with 21-feature
-          engineering, chronological splitting, and VIN-based leakage controls. I compared global median,
-          hierarchical segment, Ridge, and CatBoost models, then layered split conformal prediction and
-          subgroup reliability audits on top — which surfaced <b>severe undercoverage on $50K+ vehicles</b>
-          that the headline coverage number averaged away. Published as an interactive Tableau dashboard.
+          A pricing pipeline over <b>426,880 Craigslist vehicle listings</b> layering split conformal
+          prediction on top of CatBoost — which surfaced <b>severe undercoverage on $50K+ vehicles</b>
+          that the headline coverage number averaged away.
         </p>
         <div class="metrics">
           <div class="metric"><span class="metric-val mono">−30.2%</span><span class="metric-lbl">Test MAE vs baseline</span></div>
-          <div class="metric"><span class="metric-val mono">$3,516</span><span class="metric-lbl">MAE, 41,746 held out</span></div>
           <div class="metric"><span class="metric-val mono">87.88%</span><span class="metric-lbl">Coverage @ nominal 90%</span></div>
           <div class="metric"><span class="metric-val mono">75</span><span class="metric-lbl">Automated tests</span></div>
         </div>
         <div class="stack">
-          <span class="chip">Python</span><span class="chip">pandas</span><span class="chip">scikit-learn</span>
-          <span class="chip">CatBoost</span><span class="chip">Conformal Prediction</span><span class="chip">Tableau</span>
-          <span class="chip">Ruff</span>
+          <span class="chip">Python</span><span class="chip">pandas</span><span class="chip">CatBoost</span>
+          <span class="chip">Conformal Prediction</span><span class="chip">Tableau</span>
         </div>
         <div class="card-links">
+          <a href="project-pricing.html">Read case study</a>
           <a href="https://github.com/asim-aa/marketplace-pricing-analysis" target="_blank" rel="noopener noreferrer">Source</a>
         </div>
       </article>
 
-      <article class="card reveal">
-        <div class="card-top">
-          <h3>GroundedIQ — Evidence-Grounded Analytics Copilot</h3>
-          <div class="card-date mono">Jul 2026</div>
-        </div>
-        <div class="card-role">Text-to-SQL · Data modeling · Guardrail design</div>
-        <p>
-          An analytics application that converts natural-language business questions into
-          <b>deterministic SQL and Python</b> — not free-form LLM answers — with evidence-backed
-          summaries and explicit warnings. Seven Olist datasets were integrated into a validated
-          <b>112,650-row DuckDB analytical model</b> with schema checks, explicit table grain, and
-          safeguards against invalid aggregation, plus conversational follow-up rewriting.
-        </p>
-        <div class="metrics">
-          <div class="metric"><span class="metric-val mono">112,650</span><span class="metric-lbl">Rows modeled</span></div>
-          <div class="metric"><span class="metric-val mono">7</span><span class="metric-lbl">Datasets integrated</span></div>
-          <div class="metric"><span class="metric-val mono">40</span><span class="metric-lbl">Automated tests</span></div>
-        </div>
-        <div class="stack">
-          <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">DuckDB</span>
-          <span class="chip">Pydantic</span><span class="chip">OpenAI SDK</span><span class="chip">Streamlit</span>
-          <span class="chip">Plotly</span>
-        </div>
-        <div class="card-links">
-          <a href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener noreferrer">Source</a>
-        </div>
-      </article>
+    </div>
 
+    <div class="section-cta reveal">
+      <a class="btn btn-ghost" href="projects.html">View all projects &amp; coursework →</a>
     </div>
   </div>
 </section>
 
-<section id="more">
+<section id="about-preview">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-num">02 — Also Built</div>
-      <h2>Coursework &amp; experiments</h2>
-      <p class="sec-sub">Smaller projects from coursework and self-directed exploration.</p>
+      <div class="sec-num">02 — About</div>
+      <h2>A bit about how I work</h2>
     </div>
-    <div class="grid">
-      <a class="mini reveal" href="https://github.com/asim-aa/cogs118a-final-project" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python</div>
-        <h4>ML Benchmark Study</h4>
-        <p>SVM, Random Forest, and MLP compared across 3 UCI datasets over 81 controlled experiments.</p>
-      </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/cogs185-char-rnn-project" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python · PyTorch</div>
-        <h4>Character-Level RNN</h4>
-        <p>Sequence modeling project exploring recurrent architectures for character-level generation.</p>
-      </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/bundesliga-player-valuation" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python</div>
-        <h4>Bundesliga Player Valuation</h4>
-        <p>Data science project modeling transfer-market value for Bundesliga footballers.</p>
-      </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python</div>
-        <h4>Spotify Taste Pipeline</h4>
-        <p>Personal listening-data ETL and analysis pipeline built on the Spotify Web API.</p>
-      </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/fuel-economy-inference" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">R</div>
-        <h4>Fuel Economy Inference</h4>
-        <p>Statistical inference study on vehicle fuel-economy data, written in R.</p>
-      </a>
-      <a class="mini reveal" href="https://github.com/asim-aa/multi-agent-assistant" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python</div>
-        <h4>Multi-Agent Assistant</h4>
-        <p>Earlier exploration of agent orchestration patterns that fed into the Vacation Planner.</p>
-      </a>
+    <div class="about-preview reveal">
+      <p>
+        I'm a Mathematics–Computer Science major at UC San Diego, minoring in Cognitive Science,
+        expecting my B.S. in March 2027. I transferred in from Las Positas College with an A.S. in
+        Mathematics and Computer Science, and earned Provost Honors in Spring 2025.
+      </p>
+      <p>
+        Most of what I build starts from the same question: what does this model get wrong, and
+        does it know it? That's shown up as calibration monitoring on an NBA win-probability model,
+        conformal prediction intervals on a pricing pipeline, and fact-checking guards on LLM agent
+        output — I'd rather ship a system that reports its own limits than one that just looks
+        accurate on average.
+      </p>
+      <a class="btn btn-ghost" href="about.html">More about me →</a>
     </div>
   </div>
 </section>
 
-<section id="skills">
+<section id="learning-preview">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-num">03 — Toolkit</div>
-      <h2>Technical skills</h2>
+      <div class="sec-num">03 — Learning Lab</div>
+      <h2>What I've been reading &amp; watching</h2>
+      <p class="sec-sub">
+        Papers, courses, and videos I've actually used to close specific gaps — each one tied to
+        where it showed up in a project.
+      </p>
     </div>
-    <div class="skills reveal">
-      <div class="skill-group">
-        <h4>Languages</h4>
-        <div class="skill-list"><span class="skill">Python</span><span class="skill">SQL</span><span class="skill">R</span></div>
-      </div>
-      <div class="skill-group">
-        <h4>Machine Learning</h4>
-        <div class="skill-list">
-          <span class="skill">scikit-learn</span><span class="skill">CatBoost</span><span class="skill">PyTorch</span>
-          <span class="skill">Neural Networks</span><span class="skill">GRUs</span><span class="skill">Conformal Prediction</span>
-          <span class="skill">Feature Engineering</span><span class="skill">Model Evaluation</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h4>Data &amp; Analytics</h4>
-        <div class="skill-list">
-          <span class="skill">pandas</span><span class="skill">NumPy</span><span class="skill">DuckDB</span>
-          <span class="skill">SQLite</span><span class="skill">Tableau</span><span class="skill">Plotly</span>
-          <span class="skill">Statistical Analysis</span><span class="skill">Data Validation</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h4>Generative AI</h4>
-        <div class="skill-list">
-          <span class="skill">OpenAI SDK</span><span class="skill">Google ADK</span><span class="skill">LangGraph</span>
-          <span class="skill">LiteLLM</span><span class="skill">vLLM</span><span class="skill">Multi-Agent Workflows</span>
-          <span class="skill">Structured Outputs</span><span class="skill">Tool Calling</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h4>Engineering</h4>
-        <div class="skill-list">
-          <span class="skill">REST APIs</span><span class="skill">FastAPI</span><span class="skill">Streamlit</span>
-          <span class="skill">Pydantic</span><span class="skill">Git</span><span class="skill">GitHub Actions</span>
-          <span class="skill">pytest</span><span class="skill">Ruff</span><span class="skill">Jupyter</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="education">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-num">04 — Background</div>
-      <h2>Education</h2>
-    </div>
-    <div class="reveal">
-      <div class="edu-item">
-        <div>
-          <h4>University of California, San Diego</h4>
-          <div class="deg">B.S. Mathematics–Computer Science · Minor in Cognitive Science</div>
-          <div class="coursework">
-            <b>Relevant coursework:</b> Advanced Machine Learning Methods · Supervised Machine Learning ·
-            Artificial Intelligence · Statistical NLP · Data Analysis and Inference · Probability
-          </div>
-          <span class="honor">Provost Honors — Spring 2025</span>
-        </div>
-        <div class="when mono">Expected Mar 2027</div>
-      </div>
-      <div class="edu-item">
-        <div>
-          <h4>Las Positas College</h4>
-          <div class="deg">A.S. Mathematics and Computer Science</div>
-        </div>
-        <div class="when mono">Jun 2024</div>
-      </div>
+    <div class="section-cta tight reveal">
+      <a class="btn btn-ghost" href="learning.html">Explore the Learning Lab →</a>
     </div>
   </div>
 </section>
@@ -357,9 +249,7 @@
       </p>
       <div class="contact-links">
         <a class="btn btn-primary" href="mailto:asa009@ucsd.edu">asa009@ucsd.edu</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/asim-ahmed-129450365/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a class="btn btn-ghost" href="https://github.com/asim-aa" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a class="btn btn-ghost" href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+        <a class="btn btn-ghost" href="contact.html">All contact info →</a>
       </div>
     </div>
   </div>
@@ -370,5 +260,6 @@
 </footer>
 
 <script src="app.js" defer></script>
+<script src="hero.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NBA Win-Probability Prediction Platform — Asim Ahmed</title>
+<meta name="description" content="Case study: an 11-season NBA pregame win-probability pipeline with calibration monitoring, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Aug 2026</div>
+    <h1>NBA Win-Probability Prediction Platform</h1>
+    <p class="lede">
+      An 11-season pregame win-probability pipeline that doesn't just predict who wins —
+      it tells you how much to trust that prediction, and where it breaks down.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo — modeling, feature engineering, serving</div>
+      <div><span class="case-meta-lbl">Timeline</span>11 NBA seasons of historical data, 8 walk-forward cutoffs</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · scikit-learn · CatBoost · FastAPI · Streamlit · SQLite · pytest · GitHub Actions</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/nba-intelligence-platform" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        Most win-probability models optimize a single number — accuracy or AUC on a held-out
+        test set — and stop there. That number can look excellent while hiding a model that's
+        badly miscalibrated in specific, predictable situations, like when a team is playing the
+        second half of a back-to-back. I wanted to build something that would surface that gap
+        instead of averaging it away.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        The pipeline pulls 11 seasons of NBA game logs and builds a chronological train/test split —
+        no shuffling, no leakage from future games into past predictions. A custom Elo engine tracks
+        team strength over time, updated game by game. On top of that sits a leakage-safe
+        roster-continuity feature: instead of using injury reports directly (which aren't always
+        available historically), it proxies player availability from who actually took the court in
+        recent games, which turned out to be a stronger and more honest signal.
+      </p>
+      <p>
+        I evaluated logistic regression against CatBoost and picked logistic regression — it matched
+        CatBoost on discrimination while being easier to calibrate and audit, which mattered more than
+        squeezing out marginal AUC.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        A walk-forward backtest across 8 season cutoffs stood in for real deployment: retrain on
+        everything before a cutoff, evaluate only on what comes after, repeat. That's what caught the
+        calibration gap — a single train/test split wouldn't have. I also built a live calibration
+        monitor into the serving layer so the gap between predicted and actual win rates is visible
+        continuously, not just at training time.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What broke, and what it revealed</h3>
+      <p>
+        The aggregate numbers — 0.738 ROC-AUC, 67.8% accuracy — looked fine on their own. Splitting
+        by rest situation told a different story: a <b>1.7× calibration-error gap</b> between
+        back-to-back games and rested games. The model wasn't wrong about who was more likely to
+        win; it was overconfident specifically in the situations where fatigue matters most. That's
+        the kind of failure a single summary metric is built to hide.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">0.738</span><span class="metric-lbl">ROC-AUC</span></div>
+        <div class="metric"><span class="metric-val mono">67.8%</span><span class="metric-lbl">Test accuracy</span></div>
+        <div class="metric"><span class="metric-val mono">2,460</span><span class="metric-lbl">Frozen test games</span></div>
+        <div class="metric"><span class="metric-val mono">312</span><span class="metric-lbl">Automated tests</span></div>
+        <div class="metric"><span class="metric-val mono">1.7×</span><span class="metric-lbl">Calibration-error gap found</span></div>
+      </div>
+      <p>Served behind a FastAPI backend with a Streamlit front end, backed by SQLite and covered by 312 automated tests run on every push via GitHub Actions.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        A model's average performance and its worst-case performance are different questions, and
+        you only find the second one by deliberately slicing the data along axes that matter
+        operationally (rest, home/away, injury context) — not just axes that are easy to compute.
+        That habit carried directly into the conformal-prediction work on the marketplace pricing
+        project.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="projects.html">← All projects</a>
+  <a class="btn btn-ghost" href="project-vacation.html">Next: Multi-Agent Vacation Planner →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

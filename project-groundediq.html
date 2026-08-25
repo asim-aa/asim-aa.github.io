@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GroundedIQ — Evidence-Grounded Analytics Copilot — Asim Ahmed</title>
+<meta name="description" content="Case study: an analytics copilot that answers business questions with deterministic SQL and Python instead of free-form LLM output, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Jul 2026</div>
+    <h1>GroundedIQ — Evidence-Grounded Analytics Copilot</h1>
+    <p class="lede">
+      An analytics copilot that answers business questions with deterministic SQL and Python —
+      not a free-form LLM guess — with evidence and explicit warnings attached.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo — data modeling, text-to-SQL, guardrail design</div>
+      <div><span class="case-meta-lbl">Timeline</span>7 Olist e-commerce datasets integrated</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · SQL · DuckDB · Pydantic · OpenAI SDK · Streamlit · Plotly</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        Ask a general-purpose LLM a business analytics question and it will happily answer in
+        prose, with numbers it may have partially invented. For anything that needs to be
+        defensible — revenue by region, order fulfillment trends — that's the wrong shape of
+        answer. What's needed is a system that turns the question into actual queries against
+        actual data, and shows its work.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        Seven Olist e-commerce datasets were integrated into a single validated DuckDB analytical
+        model — 112,650 rows — with schema checks and explicit table grain defined up front, so
+        every downstream query is working against a model that's been checked for consistency
+        rather than raw, unvalidated tables.
+      </p>
+      <p>
+        A natural-language question is converted into deterministic SQL and Python rather than
+        answered directly by the model. The generated query runs against the validated model, and
+        the response is built from the actual query result plus an evidence-backed summary —
+        including explicit warnings when the question can't be answered cleanly from the available
+        data. Conversational follow-ups get rewritten with the prior context so a user can refine a
+        question without restating it from scratch.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        The guardrail layer is the core design choice: safeguards against invalid aggregation catch
+        cases where a generated query would silently produce a misleading number (double-counting
+        a join, aggregating at the wrong grain) before that number ever reaches the user. Pydantic
+        schemas enforce structure on both the generated query plan and the final response, so
+        malformed output fails loudly during development rather than shipping a plausible-looking
+        wrong answer.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What broke, and what it revealed</h3>
+      <p>
+        Early iterations without explicit table-grain checks would occasionally aggregate at the
+        wrong level — a subtle bug that produces a number that looks reasonable but is quantitatively
+        wrong. Making table grain an explicit, checked property of the schema (rather than an
+        implicit assumption) turned that class of bug into a validation failure instead of a silent
+        wrong answer.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">112,650</span><span class="metric-lbl">Rows modeled</span></div>
+        <div class="metric"><span class="metric-val mono">7</span><span class="metric-lbl">Datasets integrated</span></div>
+        <div class="metric"><span class="metric-val mono">40</span><span class="metric-lbl">Automated tests</span></div>
+      </div>
+      <p>Built with Streamlit for the interface and Plotly for visual output, backed by 40 automated tests covering the query-generation and guardrail logic.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        LLM output is most trustworthy when it's constrained to producing something checkable —
+        a query, a structured plan — rather than a final answer directly. That constraint is what
+        makes the guardrails possible in the first place, and it's a pattern I now default to
+        whenever an LLM is in the loop on something that needs to be defensible.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-pricing.html">← Marketplace Pricing Analysis</a>
+  <a class="btn btn-ghost" href="projects.html">Back to all projects →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

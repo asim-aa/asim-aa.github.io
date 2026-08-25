@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncertainty-Aware Marketplace Pricing Analysis — Asim Ahmed</title>
+<meta name="description" content="Case study: a conformal-prediction pricing pipeline over 426,880 Craigslist vehicle listings that surfaced undercoverage on high-value vehicles, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Jul 2026</div>
+    <h1>Uncertainty-Aware Marketplace Pricing Analysis</h1>
+    <p class="lede">
+      A pricing pipeline over 426,880 Craigslist vehicle listings that doesn't just predict price —
+      it predicts an honest interval, and audits where that interval lies to itself.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo — modeling, conformal prediction, reliability auditing</div>
+      <div><span class="case-meta-lbl">Timeline</span>426,880 listings, 41,746 held out for evaluation</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · pandas · scikit-learn · CatBoost · Conformal Prediction · Tableau · Ruff</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/marketplace-pricing-analysis" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        A point estimate of a used vehicle's price ("this car is worth $14,200") is much less
+        useful than an honest range, and a range is only trustworthy if you've checked that it
+        actually covers reality across every price segment — not just on average. A model that
+        hits its nominal 90% coverage target overall could still be badly wrong for the vehicles
+        where getting it wrong matters most.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        Started with 426,880 raw Craigslist vehicle listings and built 21 engineered features,
+        with a chronological split and VIN-based leakage controls so the same vehicle never leaks
+        across train/test. I compared four modeling approaches in order of increasing complexity —
+        a global median baseline, hierarchical segment medians, Ridge regression, and CatBoost —
+        to make sure the final model's lift was real and not just noise.
+      </p>
+      <p>
+        CatBoost won on raw error, but a point prediction alone doesn't tell a user how much to
+        trust it. So I layered split conformal prediction on top to generate calibrated interval
+        estimates, then ran subgroup reliability audits to check whether those intervals actually
+        held up across price segments.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        VIN-based leakage control was non-negotiable: used-vehicle marketplaces often have the
+        same car relisted multiple times, and without deduplicating by VIN, a model can "cheat" by
+        memorizing a listing it already saw in training. Chronological splitting (not random)
+        matched how the pipeline would actually be used — predicting forward, not interpolating
+        backward.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What broke, and what it revealed</h3>
+      <p>
+        The headline number — 87.88% coverage against a nominal 90% target — looked close enough
+        to reasonable. The subgroup audit told a sharper story: <b>severe undercoverage on $50K+
+        vehicles</b>, exactly the segment where a wrong interval is most expensive to a buyer or
+        seller. Averaging across all price ranges had hidden a real, actionable gap.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">−30.2%</span><span class="metric-lbl">Test MAE vs baseline</span></div>
+        <div class="metric"><span class="metric-val mono">$3,516</span><span class="metric-lbl">MAE, 41,746 held out</span></div>
+        <div class="metric"><span class="metric-val mono">87.88%</span><span class="metric-lbl">Coverage @ nominal 90%</span></div>
+        <div class="metric"><span class="metric-val mono">75</span><span class="metric-lbl">Automated tests</span></div>
+      </div>
+      <p>Published as an interactive Tableau dashboard so the coverage gap by price segment is inspectable, not buried in a notebook.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        An interval's nominal coverage rate is a starting point, not a conclusion — the same
+        discipline of slicing by a variable that matters operationally (here, price segment;
+        on the NBA project, rest days) is what turns a plausible-looking model into one you can
+        actually trust in the situations that count.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-vacation.html">← Multi-Agent Vacation Planner</a>
+  <a class="btn btn-ghost" href="project-groundediq.html">Next: GroundedIQ →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

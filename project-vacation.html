@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-Agent Vacation Planner — Asim Ahmed</title>
+<meta name="description" content="Case study: a LangGraph multi-agent trip-planning system running on live, keyless data sources at zero API cost, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="contact.html">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Aug 2026</div>
+    <h1>Multi-Agent Vacation Planner</h1>
+    <p class="lede">
+      A LangGraph trip-planning system that went from a mock-data demo to four live, keyless
+      data sources — at zero ongoing API cost.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo — orchestration design, reliability engineering</div>
+      <div><span class="case-meta-lbl">Timeline</span>Migrated from mock-data prototype to live sources</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · LangGraph · OpenAI SDK · Streamlit · pytest · GitHub Actions</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://vacation-planner-agent-hybzvttaeapp48zwno5wshm.streamlit.app/" target="_blank" rel="noopener noreferrer">Live demo</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/vacation-planner-agent" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        Trip planning is a genuinely multi-step problem — flights, activities, and lodging all
+        depend on each other and on budget — which makes it a good stress test for multi-agent
+        orchestration. The first version used mock data, which is fine for testing control flow
+        but tells you nothing about whether the system survives contact with real, messy,
+        rate-limited APIs.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        Built as a LangGraph graph: flight search and activity search run in parallel since they
+        don't depend on each other, then a budget-dependent hotel-search stage runs sequentially
+        once the remaining budget is known, and a final itinerary compiler assembles everything
+        into a coherent plan. The graph structure — rather than a single monolithic prompt — is
+        what let parallel and sequential stages coexist cleanly.
+      </p>
+      <p>
+        Migrating off mock data meant wiring in four live, keyless data sources at zero API cost,
+        which meant working within the real constraints (rate limits, inconsistent response
+        shapes, occasional downtime) that mock data hides entirely.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        Three problems showed up once real data was in the loop, and each got a targeted fix
+        rather than a workaround. A third-party scraping library had a parsing bug that silently
+        discarded valid results — silent failures are worse than loud ones, so I diagnosed and
+        patched it rather than adding a retry that would have masked the same bug. Airport
+        disambiguation (cities with multiple airports, regional hub routing) got an offline
+        resolver with hub-connection fallback, so the system doesn't depend on a live geocoding
+        API just to figure out where "Bay Area" means. And because LLMs will confidently invent
+        plausible-sounding place names, I added a fact-checking guard that cross-references
+        generated output against ground truth before it reaches the itinerary.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What broke, and what it revealed</h3>
+      <p>
+        Repeat searches were the clearest before/after: identical queries were re-hitting live
+        sources every time, adding real latency for no new information. A TTL cache brought
+        repeat-search latency from <b>1.15 seconds down to effectively zero</b> — the kind of fix
+        that's invisible in a demo with mock data but obvious the moment real network calls are
+        involved.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">1.15s → 0.00s</span><span class="metric-lbl">Repeat search latency</span></div>
+        <div class="metric"><span class="metric-val mono">4</span><span class="metric-lbl">Live keyless sources</span></div>
+        <div class="metric"><span class="metric-val mono">$0</span><span class="metric-lbl">API cost</span></div>
+        <div class="metric"><span class="metric-val mono">102</span><span class="metric-lbl">Automated tests</span></div>
+      </div>
+      <p>Deployed on Streamlit Community Cloud, with 102 automated tests covering the graph logic, the airport resolver, and the fact-checking guard.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        Mock data is useful for testing control flow but actively misleading about reliability —
+        the real failure modes (silent parsing bugs, ambiguous inputs, hallucinated outputs) only
+        show up once live data is in the loop, so I now try to wire in at least one real data
+        source as early as possible rather than perfecting the mock-data version first.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-nba.html">← NBA Win-Probability Platform</a>
+  <a class="btn btn-ghost" href="project-pricing.html">Next: Marketplace Pricing Analysis →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
