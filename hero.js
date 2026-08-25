@@ -29,17 +29,19 @@
       '$ whoami',
       'Asim Ahmed',
       '$ role --current',
-      'ML & Data Science, UC San Diego',
+      'ML & Data Science @ UCSD',
       '$ stack --top',
-      'Python · PyTorch · LangGraph · FastAPI',
+      'Python · PyTorch · LangGraph',
       '$ status',
-      'Open to ML / DS roles · San Diego, CA',
+      'Open to ML/DS roles · SD, CA',
     ];
     const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      termBody.textContent = lines.join('\n');
+      // the full 8-line log doesn't fit the screen at rest — show a short,
+      // curated snapshot instead of the whole typewriter script
+      termBody.textContent = ['$ whoami', 'Asim Ahmed', 'Open to ML/DS roles'].join('\n');
     } else {
       let li = 0, ci = 0, deleting = false, shown = '';
       const tick = () => {
@@ -68,19 +70,38 @@
     }
   }
 
-  /* ---------- hero computer: spin button ---------- */
+  /* ---------- hero computer: continuous spin, driven frame-by-frame
+     so the ambient rotation and the button-triggered "flick" are the same
+     smooth motion (no jump from swapping CSS animation-duration mid-flight) ---------- */
   const compRig = document.getElementById('compRig');
   const spinBtn = document.getElementById('spinBtn');
-  if (compRig && spinBtn) {
-    let spinning = false;
-    spinBtn.addEventListener('click', () => {
-      if (spinning) return;
-      spinning = true;
-      const prevDuration = compRig.style.animationDuration;
-      compRig.style.animationDuration = '1s';
-      setTimeout(() => {
-        compRig.style.animationDuration = prevDuration || '';
-        spinning = false;
-      }, 1000);
-    });
+  if (compRig) {
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      compRig.style.transform = 'rotateX(-10deg) rotateY(-24deg)';
+    } else {
+      const baseSpeed = 360 / 24000; // deg/ms — one slow ambient turn every 24s
+      let angle = -24;
+      let boost = 0;
+      let lastT = null;
+
+      const frame = (t) => {
+        if (lastT === null) lastT = t;
+        const dt = Math.min(t - lastT, 50); // clamp so a backgrounded tab can't jump
+        lastT = t;
+        angle += (baseSpeed + boost) * dt;
+        boost *= Math.pow(0.04, dt / 1000); // quick exponential decay after a click
+        if (boost < 0.0004) boost = 0;
+        compRig.style.transform = 'rotateX(-10deg) rotateY(' + angle + 'deg)';
+        requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+
+      if (spinBtn) {
+        spinBtn.addEventListener('click', () => {
+          boost += 360 / 700; // a burst of extra angular velocity that decays smoothly
+        });
+      }
+    }
   }
