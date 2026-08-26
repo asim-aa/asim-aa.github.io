@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uncertainty-Aware Marketplace Pricing Analysis — Asim Ahmed</title>
+<title>Uncertainty-Aware Marketplace Pricing Analysis | Asim Ahmed</title>
 <meta name="description" content="Case study: a conformal-prediction pricing pipeline over 426,880 Craigslist vehicle listings that surfaced undercoverage on high-value vehicles, built by Asim Ahmed.">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -35,11 +35,11 @@
     <div class="eyebrow">Case Study · Jul 2026</div>
     <h1>Uncertainty-Aware Marketplace Pricing Analysis</h1>
     <p class="lede">
-      A pricing pipeline over 426,880 Craigslist vehicle listings that doesn't just predict price —
+      A pricing pipeline over 426,880 Craigslist vehicle listings that doesn't just predict price,
       it predicts an honest interval, and audits where that interval lies to itself.
     </p>
     <div class="case-meta reveal">
-      <div><span class="case-meta-lbl">Role</span>Solo — modeling, conformal prediction, reliability auditing</div>
+      <div><span class="case-meta-lbl">Role</span>Solo: modeling, conformal prediction, reliability auditing</div>
       <div><span class="case-meta-lbl">Timeline</span>426,880 listings, 41,746 held out for evaluation</div>
       <div><span class="case-meta-lbl">Stack</span>Python · pandas · scikit-learn · CatBoost · Conformal Prediction · Tableau · Ruff</div>
     </div>
@@ -57,7 +57,7 @@
       <p>
         A point estimate of a used vehicle's price ("this car is worth $14,200") is much less
         useful than an honest range, and a range is only trustworthy if you've checked that it
-        actually covers reality across every price segment — not just on average. A model that
+        actually covers reality across every price segment, not just on average. A model that
         hits its nominal 90% coverage target overall could still be badly wrong for the vehicles
         where getting it wrong matters most.
       </p>
@@ -68,8 +68,8 @@
       <p>
         Started with 426,880 raw Craigslist vehicle listings and built 21 engineered features,
         with a chronological split and VIN-based leakage controls so the same vehicle never leaks
-        across train/test. I compared four modeling approaches in order of increasing complexity —
-        a global median baseline, hierarchical segment medians, Ridge regression, and CatBoost —
+        across train/test. I compared four modeling approaches in order of increasing complexity:
+        a global median baseline, hierarchical segment medians, Ridge regression, and CatBoost.
         to make sure the final model's lift was real and not just noise.
       </p>
       <p>
@@ -86,7 +86,7 @@
         VIN-based leakage control was non-negotiable: used-vehicle marketplaces often have the
         same car relisted multiple times, and without deduplicating by VIN, a model can "cheat" by
         memorizing a listing it already saw in training. Chronological splitting (not random)
-        matched how the pipeline would actually be used — predicting forward, not interpolating
+        matched how the pipeline would actually be used: predicting forward, not interpolating
         backward.
       </p>
     </div>
@@ -94,7 +94,7 @@
     <div class="case-block reveal">
       <h3>What broke, and what it revealed</h3>
       <p>
-        The headline number — 87.88% coverage against a nominal 90% target — looked close enough
+        The headline number, 87.88% coverage against a nominal 90% target, looked close enough
         to reasonable. The subgroup audit told a sharper story: <b>severe undercoverage on $50K+
         vehicles</b>, exactly the segment where a wrong interval is most expensive to a buyer or
         seller. Averaging across all price ranges had hidden a real, actionable gap.
@@ -115,7 +115,7 @@
     <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
-        An interval's nominal coverage rate is a starting point, not a conclusion — the same
+        An interval's nominal coverage rate is a starting point, not a conclusion: the same
         discipline of slicing by a variable that matters operationally (here, price segment;
         on the NBA project, rest days) is what turns a plausible-looking model into one you can
         actually trust in the situations that count.

@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Asim Ahmed — Résumé</title>
+<title>Asim Ahmed | Résumé</title>
 <link rel="stylesheet" href="resume.css">
 </head>
 <body>
@@ -66,8 +66,8 @@
     </div>
     <div class="stack">Python, pandas, scikit-learn, CatBoost, FastAPI, Streamlit, SQLite, pytest, Ruff, GitHub Actions</div>
     <ul>
-      <li><span class="lead">Reached 0.738 ROC-AUC and 67.8% accuracy on a frozen 2,460-game test set</span> — built an 11-season pipeline with chronological splitting, a custom Elo engine, and a leakage-safe roster-continuity feature proxying player injuries from game logs; selected logistic regression over CatBoost.</li>
-      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games — hidden by the aggregate accuracy number — via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks.</li>
+      <li><span class="lead">Reached 0.738 ROC-AUC and 67.8% accuracy on a frozen 2,460-game test set</span>, building an 11-season pipeline with chronological splitting, a custom Elo engine, and a leakage-safe roster-continuity feature proxying player injuries from game logs; selected logistic regression over CatBoost.</li>
+      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games, hidden by the aggregate accuracy number, via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks.</li>
       <li><span class="lead">Shipped to production behind 312 automated tests</span>, deploying a FastAPI prediction service and Streamlit dashboard on a shared feature-computation and serving layer, with scheduled CI keeping live features current.</li>
     </ul>
   </div>
@@ -79,7 +79,7 @@
     </div>
     <div class="stack">Python, LangGraph, Streamlit, OpenAI SDK, pytest, GitHub Actions</div>
     <ul>
-      <li><span class="lead">Migrated a mock-data prototype to four live, keyless data sources at zero API cost</span> — architecting a LangGraph system with parallel flight/activity search, a budget-dependent sequential hotel stage, and a final itinerary compiler.</li>
+      <li><span class="lead">Migrated a mock-data prototype to four live, keyless data sources at zero API cost</span>, architecting a LangGraph system with parallel flight/activity search, a budget-dependent sequential hotel stage, and a final itinerary compiler.</li>
       <li><span class="lead">Cut repeat search latency from 1.15s to 0.00s</span> with a TTL cache, and eliminated hallucinated place names using a fact-checking guard that cross-references LLM output against ground-truth data.</li>
       <li><span class="lead">Diagnosed and patched a silent data-loss bug</span> in a third-party scraping library that discarded valid results, and built an offline airport-disambiguation resolver with hub-connection fallback; backed by 102 tests, CI, and a public Streamlit deployment.</li>
     </ul>
@@ -100,14 +100,14 @@
 
   <div class="proj">
     <div class="row">
-      <span class="proj-name">GroundedIQ — Evidence-Grounded Analytics Copilot</span>
+      <span class="proj-name">GroundedIQ: Evidence-Grounded Analytics Copilot</span>
       <span class="when">Jul. 2026</span>
     </div>
     <div class="stack">Python, SQL, DuckDB, pandas, Streamlit, Plotly, Pydantic, OpenAI SDK, pytest, Ruff</div>
     <ul>
       <li><span class="lead">Converted natural-language business questions into deterministic SQL and Python analyses</span> with evidence-backed summaries and explicit warnings, rather than free-form model output.</li>
       <li><span class="lead">Integrated seven Olist datasets into a validated 112,650-row DuckDB analytical model</span> with schema checks, explicit table grain, and safeguards against invalid aggregation.</li>
-      <li><span class="lead">Removed the LLM as a single point of failure for the public deployment</span> — the explanation layer now falls back to a deterministic summary built from the same verified metrics when the API is unavailable; deployed publicly on Streamlit Community Cloud, backed by 42 automated tests.</li>
+      <li><span class="lead">Removed the LLM as a single point of failure for the public deployment</span>: the explanation layer now falls back to a deterministic summary built from the same verified metrics when the API is unavailable; deployed publicly on Streamlit Community Cloud, backed by 42 automated tests.</li>
     </ul>
   </div>
 

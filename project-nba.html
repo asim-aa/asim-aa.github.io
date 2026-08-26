@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NBA Win-Probability Prediction Platform — Asim Ahmed</title>
+<title>NBA Win-Probability Prediction Platform | Asim Ahmed</title>
 <meta name="description" content="Case study: an 11-season NBA pregame win-probability pipeline with calibration monitoring, built by Asim Ahmed.">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -35,11 +35,11 @@
     <div class="eyebrow">Case Study · Aug 2026</div>
     <h1>NBA Win-Probability Prediction Platform</h1>
     <p class="lede">
-      An 11-season pregame win-probability pipeline that doesn't just predict who wins —
+      An 11-season pregame win-probability pipeline that doesn't just predict who wins,
       it tells you how much to trust that prediction, and where it breaks down.
     </p>
     <div class="case-meta reveal">
-      <div><span class="case-meta-lbl">Role</span>Solo — modeling, feature engineering, serving</div>
+      <div><span class="case-meta-lbl">Role</span>Solo: modeling, feature engineering, serving</div>
       <div><span class="case-meta-lbl">Timeline</span>11 NBA seasons of historical data, 8 walk-forward cutoffs</div>
       <div><span class="case-meta-lbl">Stack</span>Python · scikit-learn · CatBoost · FastAPI · Streamlit · SQLite · pytest · GitHub Actions</div>
     </div>
@@ -54,8 +54,8 @@
     <div class="case-block reveal">
       <h3>Problem</h3>
       <p>
-        Most win-probability models optimize a single number — accuracy or AUC on a held-out
-        test set — and stop there. That number can look excellent while hiding a model that's
+        Most win-probability models optimize a single number, accuracy or AUC on a held-out
+        test set, and stop there. That number can look excellent while hiding a model that's
         badly miscalibrated in specific, predictable situations, like when a team is playing the
         second half of a back-to-back. I wanted to build something that would surface that gap
         instead of averaging it away.
@@ -65,7 +65,7 @@
     <div class="case-block reveal">
       <h3>Approach &amp; architecture</h3>
       <p>
-        The pipeline pulls 11 seasons of NBA game logs and builds a chronological train/test split —
+        The pipeline pulls 11 seasons of NBA game logs and builds a chronological train/test split:
         no shuffling, no leakage from future games into past predictions. A custom Elo engine tracks
         team strength over time, updated game by game. On top of that sits a leakage-safe
         roster-continuity feature: instead of using injury reports directly (which aren't always
@@ -73,7 +73,7 @@
         recent games, which turned out to be a stronger and more honest signal.
       </p>
       <p>
-        I evaluated logistic regression against CatBoost and picked logistic regression — it matched
+        I evaluated logistic regression against CatBoost and picked logistic regression: it matched
         CatBoost on discrimination while being easier to calibrate and audit, which mattered more than
         squeezing out marginal AUC.
       </p>
@@ -84,7 +84,7 @@
       <p>
         A walk-forward backtest across 8 season cutoffs stood in for real deployment: retrain on
         everything before a cutoff, evaluate only on what comes after, repeat. That's what caught the
-        calibration gap — a single train/test split wouldn't have. I also built a live calibration
+        calibration gap, a single train/test split wouldn't have. I also built a live calibration
         monitor into the serving layer so the gap between predicted and actual win rates is visible
         continuously, not just at training time.
       </p>
@@ -93,7 +93,7 @@
     <div class="case-block reveal">
       <h3>What broke, and what it revealed</h3>
       <p>
-        The aggregate numbers — 0.738 ROC-AUC, 67.8% accuracy — looked fine on their own. Splitting
+        The aggregate numbers (0.738 ROC-AUC, 67.8% accuracy) looked fine on their own. Splitting
         by rest situation told a different story: a <b>1.7× calibration-error gap</b> between
         back-to-back games and rested games. The model wasn't wrong about who was more likely to
         win; it was overconfident specifically in the situations where fatigue matters most. That's
@@ -118,7 +118,7 @@
       <p>
         A model's average performance and its worst-case performance are different questions, and
         you only find the second one by deliberately slicing the data along axes that matter
-        operationally (rest, home/away, injury context) — not just axes that are easy to compute.
+        operationally (rest, home/away, injury context), not just axes that are easy to compute.
         That habit carried directly into the conformal-prediction work on the marketplace pricing
         project.
       </p>

@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GroundedIQ — Evidence-Grounded Analytics Copilot — Asim Ahmed</title>
+<title>GroundedIQ: Evidence-Grounded Analytics Copilot | Asim Ahmed</title>
 <meta name="description" content="Case study: a publicly deployed analytics copilot that answers business questions with deterministic SQL and Python, with the LLM demoted to an optional explanation layer, built by Asim Ahmed.">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -33,15 +33,15 @@
   <div class="wrap">
     <a class="back-link reveal" href="projects.html">← All projects</a>
     <div class="eyebrow">Case Study · Jul 2026</div>
-    <h1>GroundedIQ — Evidence-Grounded Analytics Copilot</h1>
+    <h1>GroundedIQ: Evidence-Grounded Analytics Copilot</h1>
     <p class="lede">
-      An analytics copilot that answers business questions with deterministic SQL and Python —
-      not a free-form LLM guess — with evidence and explicit warnings attached. Now publicly
+      An analytics copilot that answers business questions with deterministic SQL and Python,
+      not a free-form LLM guess, with evidence and explicit warnings attached. Now publicly
       deployed with the LLM demoted to an optional layer: if it's unavailable, the app still
       answers from verified evidence.
     </p>
     <div class="case-meta reveal">
-      <div><span class="case-meta-lbl">Role</span>Solo — data modeling, text-to-SQL, guardrail design</div>
+      <div><span class="case-meta-lbl">Role</span>Solo: data modeling, text-to-SQL, guardrail design</div>
       <div><span class="case-meta-lbl">Timeline</span>7 Olist e-commerce datasets integrated</div>
       <div><span class="case-meta-lbl">Stack</span>Python · SQL · DuckDB · Pydantic · OpenAI SDK · Streamlit · Plotly</div>
     </div>
@@ -59,7 +59,7 @@
       <p>
         Ask a general-purpose LLM a business analytics question and it will happily answer in
         prose, with numbers it may have partially invented. For anything that needs to be
-        defensible — revenue by region, order fulfillment trends — that's the wrong shape of
+        defensible, revenue by region, order fulfillment trends, that's the wrong shape of
         answer. What's needed is a system that turns the question into actual queries against
         actual data, and shows its work.
       </p>
@@ -69,14 +69,14 @@
       <h3>Approach &amp; architecture</h3>
       <p>
         Seven Olist e-commerce datasets were integrated into a single validated DuckDB analytical
-        model — 112,650 rows — with schema checks and explicit table grain defined up front, so
+        model, 112,650 rows, with schema checks and explicit table grain defined up front, so
         every downstream query is working against a model that's been checked for consistency
         rather than raw, unvalidated tables.
       </p>
       <p>
         A natural-language question is converted into deterministic SQL and Python rather than
         answered directly by the model. The generated query runs against the validated model, and
-        the response is built from the actual query result plus an evidence-backed summary —
+        the response is built from the actual query result plus an evidence-backed summary,
         including explicit warnings when the question can't be answered cleanly from the available
         data. Conversational follow-ups get rewritten with the prior context so a user can refine a
         question without restating it from scratch.
@@ -99,7 +99,7 @@
       <h3>What broke, and what it revealed</h3>
       <p>
         Early iterations without explicit table-grain checks would occasionally aggregate at the
-        wrong level — a subtle bug that produces a number that looks reasonable but is quantitatively
+        wrong level: a subtle bug that produces a number that looks reasonable but is quantitatively
         wrong. Making table grain an explicit, checked property of the schema (rather than an
         implicit assumption) turned that class of bug into a validation failure instead of a silent
         wrong answer.
@@ -120,7 +120,7 @@
       <h3>Hardening for public deployment</h3>
       <p>
         After the initial build, I removed the explanation layer's sole dependency on an external
-        LLM API — a single point of failure for a demo meant to be public and always reachable.
+        LLM API, a single point of failure for a demo meant to be public and always reachable.
         The explanation step now branches off the same verified <code>EvidenceResult</code>: if
         the LLM is configured and reachable, it produces a grounded natural-language explanation;
         if credentials are missing or the provider fails, the app falls back to a deterministic
@@ -134,8 +134,8 @@
     <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
-        LLM output is most trustworthy when it's constrained to producing something checkable —
-        a query, a structured plan — rather than a final answer directly. That constraint is what
+        LLM output is most trustworthy when it's constrained to producing something checkable:
+        a query, a structured plan, rather than a final answer directly. That constraint is what
         makes the guardrails possible in the first place, and it's a pattern I now default to
         whenever an LLM is in the loop on something that needs to be defensible. The same instinct
         extended to deployment: treating the LLM as an optional enhancement rather than a hard
