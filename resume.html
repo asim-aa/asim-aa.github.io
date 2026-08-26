@@ -107,7 +107,7 @@
     <ul>
       <li><span class="lead">Converted natural-language business questions into deterministic SQL and Python analyses</span> with evidence-backed summaries and explicit warnings, rather than free-form model output.</li>
       <li><span class="lead">Integrated seven Olist datasets into a validated 112,650-row DuckDB analytical model</span> with schema checks, explicit table grain, and safeguards against invalid aggregation.</li>
-      <li><span class="lead">Delivered KPI reporting, trend visualizations, and conversational follow-up rewriting</span>, supported by 40 automated tests.</li>
+      <li><span class="lead">Removed the LLM as a single point of failure for the public deployment</span> — the explanation layer now falls back to a deterministic summary built from the same verified metrics when the API is unavailable; deployed publicly on Streamlit Community Cloud, backed by 42 automated tests.</li>
     </ul>
   </div>
 
