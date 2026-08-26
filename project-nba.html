@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NBA Win-Probability Prediction Platform | Asim Ahmed</title>
-<meta name="description" content="Case study: an 11-season NBA pregame win-probability pipeline with calibration monitoring, built by Asim Ahmed.">
+<meta name="description" content="Case study: an 11-season NBA pregame win-probability pipeline with calibration monitoring, shipped as a live pick-the-winner dashboard, built by Asim Ahmed.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -44,6 +44,7 @@
       <div><span class="case-meta-lbl">Stack</span>Python · scikit-learn · CatBoost · FastAPI · Streamlit · SQLite · pytest · GitHub Actions</div>
     </div>
     <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://nba-intelligence-platform-uhspx8ztbxf4algcfyujvb.streamlit.app/" target="_blank" rel="noopener noreferrer">Live dashboard</a>
       <a class="btn btn-ghost" href="https://github.com/asim-aa/nba-intelligence-platform" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
     </div>
   </div>
@@ -160,6 +161,36 @@
       <p>
         Neither diagnostic retunes the model or reopens the one-time test result; they exist
         purely to show how much the headline numbers would move under a different cutoff.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Turning the frozen model into a game</h3>
+      <p>
+        Past the modeling pipeline, the project ships as a public Streamlit dashboard that turns
+        the frozen model into a pick-the-winner game: pull up a day's slate, compare each
+        matchup's pregame stats, lock in a pick before the model's probability is revealed, then
+        see how both calls did against the real outcome. It defaults to a historical date since
+        the 2026-27 season hasn't started yet, the same flow works unchanged once it does.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Feature</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Pick before the model</td><td>Lock in a winner for each matchup before the model's probability is revealed</td></tr>
+            <tr><td>Pregame comparison</td><td>Season and L10 form, recent scoring, rest, Elo rating, and other model context for both teams</td></tr>
+            <tr><td>Simulated parlay</td><td>Combines every locked pick for a slate into one paper parlay at a fixed -110 illustrative vig per leg, tracked separately for your picks and the model's picks</td></tr>
+            <tr><td>Simulated round robin</td><td>Splits a slate into smaller combinations so one missed pick doesn't invalidate the whole parlay</td></tr>
+            <tr><td>Live calibration monitor</td><td>Compares resolved live predictions against the frozen test-set reference</td></tr>
+            <tr><td>Simulated betting tracker</td><td>Evaluates a fixed-stake, fixed-odds model-following strategy on paper</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        All betting-style features are simulation only: no real money, sportsbook integration,
+        payment method, or wagering transaction exists anywhere in the application. The point is
+        an entertaining, legible way to compare human judgment against a calibrated model across
+        a full slate, not betting advice.
       </p>
     </div>
 
