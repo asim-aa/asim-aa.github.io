@@ -35,8 +35,8 @@
     <div class="eyebrow">Case Study · Jul 2026</div>
     <h1>Uncertainty-Aware Marketplace Pricing Analysis</h1>
     <p class="lede">
-      A pricing pipeline over 426,880 Craigslist vehicle listings that doesn't just predict price,
-      it predicts an honest interval, and audits where that interval lies to itself.
+      A pricing pipeline over 426,880 Craigslist vehicle listings: a price estimate paired with a
+      calibrated interval, audited segment by segment for where that interval actually holds.
     </p>
     <div class="case-meta reveal">
       <div><span class="case-meta-lbl">Role</span>Solo: modeling, conformal prediction, reliability auditing</div>
@@ -68,8 +68,8 @@
       <p>
         Started with 426,880 raw Craigslist vehicle listings and built 21 engineered features,
         with a chronological split and VIN-based leakage controls so the same vehicle never leaks
-        across train/test. I compared four modeling approaches in order of increasing complexity:
-        a global median baseline, hierarchical segment medians, Ridge regression, and CatBoost.
+        across train/test. I compared four modeling approaches in order of increasing complexity,
+        a global median baseline, hierarchical segment medians, Ridge regression, and CatBoost,
         to make sure the final model's lift was real and not just noise.
       </p>
       <p>
@@ -94,10 +94,10 @@
     <div class="case-block reveal">
       <h3>What broke, and what it revealed</h3>
       <p>
-        The headline number, 87.88% coverage against a nominal 90% target, looked close enough
-        to reasonable. The subgroup audit told a sharper story: <b>severe undercoverage on $50K+
-        vehicles</b>, exactly the segment where a wrong interval is most expensive to a buyer or
-        seller. Averaging across all price ranges had hidden a real, actionable gap.
+        87.88% coverage against a nominal 90% target reads like a passing grade. It isn't evenly
+        earned: cut by price band and the picture changes completely, <b>severe undercoverage on
+        $50K+ vehicles</b>, exactly the segment where a wrong interval costs the most. One number,
+        computed across the whole dataset, was never going to catch that.
       </p>
     </div>
 
