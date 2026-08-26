@@ -77,12 +77,40 @@
   const spinBtn = document.getElementById('spinBtn');
   if (compRig) {
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const restAngle = -24;
 
     if (reduceMotion) {
-      compRig.style.transform = 'rotateX(-10deg) rotateY(-24deg)';
+      // no continuous ambient spin, but a click is a deliberate, bounded
+      // action the user asked for, so the button still does something:
+      // one short, finite turn back to rest rather than silently nothing.
+      let angle = restAngle;
+      compRig.style.transform = 'rotateX(-10deg) rotateY(' + angle + 'deg)';
+      if (spinBtn) {
+        let spinning = false;
+        spinBtn.addEventListener('click', () => {
+          if (spinning) return;
+          spinning = true;
+          const start = angle;
+          const target = angle + 220;
+          const duration = 480;
+          const t0 = performance.now();
+          const step = (t) => {
+            const p = Math.min((t - t0) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            angle = start + (target - start) * eased;
+            compRig.style.transform = 'rotateX(-10deg) rotateY(' + angle + 'deg)';
+            if (p < 1) {
+              requestAnimationFrame(step);
+            } else {
+              spinning = false;
+            }
+          };
+          requestAnimationFrame(step);
+        });
+      }
     } else {
       const baseSpeed = 360 / 24000; // deg/ms — one slow ambient turn every 24s
-      let angle = -24;
+      let angle = restAngle;
       let boost = 0;
       let lastT = null;
 
