@@ -316,6 +316,8 @@
     perspective:calc(var(--cs) * 3.4);
     position:relative;
   }
+  .comp-scene.draggable{cursor:grab;touch-action:none}
+  .comp-scene.dragging{cursor:grabbing}
   .comp-scene::after{
     content:'';position:absolute;left:50%;
     bottom:calc(var(--cs) * 14 / 300);

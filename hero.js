@@ -120,6 +120,7 @@
       const canHover = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
       let tiltX = 0, tiltY = 0, tiltTX = 0, tiltTY = 0;
       if (compScene && canHover) {
+        compScene.classList.add('draggable');
         const maxTiltX = 10; // deg, up/down look
         const maxTiltY = 18; // deg, left/right look
         compScene.addEventListener('mousemove', (e) => {
@@ -133,6 +134,45 @@
           tiltTX = 0;
           tiltTY = 0;
         });
+
+        // click-and-drag rotate: grab the rig and spin it directly by hand,
+        // release mid-motion and the same boost/decay physics as the button
+        // click carries the momentum on, instead of stopping dead
+        let dragging = false;
+        let dragLastX = 0, dragLastT = 0, dragVX = 0;
+        const degPerPx = 0.35;
+
+        compScene.addEventListener('pointerdown', (e) => {
+          dragging = true;
+          dragLastX = e.clientX;
+          dragLastT = performance.now();
+          dragVX = 0;
+          compScene.setPointerCapture(e.pointerId);
+          compScene.classList.add('dragging');
+        });
+
+        compScene.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          const now = performance.now();
+          const dt = Math.max(now - dragLastT, 1);
+          const dx = e.clientX - dragLastX;
+          angle += dx * degPerPx;
+          dragVX = (dx * degPerPx) / dt; // deg/ms, same unit boost uses
+          dragLastX = e.clientX;
+          dragLastT = now;
+        });
+
+        const endDrag = (e) => {
+          if (!dragging) return;
+          dragging = false;
+          boost += dragVX * 14; // hand off release velocity to the decay curve
+          compScene.classList.remove('dragging');
+          if (e && e.pointerId !== undefined) {
+            try { compScene.releasePointerCapture(e.pointerId); } catch (err) {}
+          }
+        };
+        compScene.addEventListener('pointerup', endDrag);
+        compScene.addEventListener('pointercancel', endDrag);
       }
 
       const frame = (t) => {
