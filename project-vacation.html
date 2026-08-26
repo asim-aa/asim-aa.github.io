@@ -117,6 +117,48 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Process: mock first, then live, one source at a time</h3>
+      <p>
+        v1 proved the LangGraph orchestration, parallel fan-out/fan-in, budget math, and itinerary
+        compilation against local mock data (Kaggle CSVs loaded into SQLite), with a full test
+        suite behind it before taking on real APIs. Only once that pipeline worked did v2 replace
+        every mock source with something live, one at a time, landing on zero API keys required
+        anywhere in the final system.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Source</th><th>v1</th><th>v2 (current)</th></tr></thead>
+          <tbody>
+            <tr><td>Flights</td><td>Kaggle CSV in SQLite</td><td>fast-flights (live Google Flights), rebuilt on the keyless library after the original rate-limited RapidAPI plan hit its quota</td></tr>
+            <tr><td>Hotels</td><td>Kaggle CSV in SQLite</td><td>fast-hotels (live Google Hotels), filtered to a per-night ceiling from remaining budget</td></tr>
+            <tr><td>Activities</td><td>Kaggle CSV in SQLite</td><td>OpenStreetMap: Nominatim geocoding + Overpass POI queries, ranked by season fit and distance</td></tr>
+            <tr><td>Weather</td><td>Kaggle CSV in SQLite</td><td>Open-Meteo real historical climate data at the destination's actual coordinates</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Process: catching what only live data reveals</h3>
+      <p>
+        Each of these surfaced once real, uncontrolled data was in the loop, none would have shown
+        up against a fixture, and each got a targeted fix with a regression test rather than a
+        workaround.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>What broke</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>fast-flights 3.0.2 silently discarded results with no price attached, or an unrecognized "no results" shape</td><td>Patched via a monkeypatch with regression tests reproducing both crash shapes; recovered real bookable flights previously thrown away</td></tr>
+            <tr><td>A flight recommendation invented a destination the data never mentioned ("Vancouver" for a trip actually going to Guangzhou)</td><td>A narrative guard checks every LLM-written recommendation against the real place names involved, looked up offline, and swaps in a plain templated sentence if one doesn't belong</td></tr>
+            <tr><td>Chat refinement occasionally claimed it changed something when nothing was left to switch to</td><td>Regression test using Streamlit's AppTest framework to click the real refine buttons and submit real chat input</td></tr>
+            <tr><td>Identical repeat searches were re-scraping live sources for no new information</td><td>Short-TTL cache in front of every live search; verified live, repeat search latency dropped from 1.15s to 0.00s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         Mock data is useful for testing control flow but actively misleading about reliability:
