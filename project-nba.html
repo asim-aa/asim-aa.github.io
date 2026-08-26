@@ -114,6 +114,56 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Process: the one-time test rule</h3>
+      <p>
+        The project spec draws a hard line: the held-out test set gets read exactly once, after
+        the modeling approach is frozen on validation performance alone. When I added the
+        roster-continuity feature after the initial freeze (v1.1), I validated it the same way,
+        on validation data only, before touching test, then re-ran the one-time evaluation as a
+        new, documented iteration rather than reopening the original result.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Metric</th><th>v1</th><th>v1.1 (current)</th></tr></thead>
+          <tbody>
+            <tr><td>Log loss</td><td>0.5996</td><td>0.5965</td></tr>
+            <tr><td>Brier score</td><td>0.2067</td><td>0.2054</td></tr>
+            <tr><td>ROC-AUC</td><td>0.7347</td><td>0.7381</td></tr>
+            <tr><td>Accuracy (0.50 threshold)</td><td>0.6789</td><td>0.6780</td></tr>
+            <tr><td>Expected calibration error</td><td>0.0213</td><td>0.0214</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Test performance matched or exceeded validation on every metric both times, with no sign
+        that model selection had overfit to the validation season.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Where the calibration gap really lives</h3>
+      <p>
+        The headline 1.7× calibration gap is one number from one test cutoff. Two supplementary
+        diagnostics go further without reopening the frozen result: a walk-forward backtest across
+        8 season cutoffs, and a calibration breakdown by rest status.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Diagnostic</th><th>Finding</th></tr></thead>
+          <tbody>
+            <tr><td>Walk-forward backtest, 8 cutoffs</td><td>Accuracy ranges 0.62 to 0.68 depending on the cutoff; the official result sits near the favorable end, not the middle</td></tr>
+            <tr><td>Back-to-back games</td><td>ECE 0.0390</td></tr>
+            <tr><td>Rested games</td><td>ECE 0.0233</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Neither diagnostic retunes the model or reopens the one-time test result; they exist
+        purely to show how much the headline numbers would move under a different cutoff.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         A model's average performance and its worst-case performance are different questions, and
