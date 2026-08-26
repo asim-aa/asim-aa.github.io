@@ -183,19 +183,21 @@
             <span class="case-date mono">Jul 2026</span>
           </div>
           <h3>GroundedIQ — Evidence-Grounded Analytics Copilot</h3>
-          <p class="case-tagline">Deterministic SQL and Python answers — not a fluent, free-form guess.</p>
+          <p class="case-tagline">Deterministic SQL and Python answers — resilient even when the LLM isn't.</p>
           <div class="case-role">Text-to-SQL · Data modeling · Guardrail design</div>
           <p class="case-desc">
             An analytics application that converts natural-language business questions into
             <b>deterministic SQL and Python</b> — not free-form LLM answers — with evidence-backed
             summaries and explicit warnings. Seven Olist datasets were integrated into a validated
             <b>112,650-row DuckDB analytical model</b> with schema checks and safeguards against
-            invalid aggregation.
+            invalid aggregation. The LLM explanation layer is now <b>optional</b>: if it's
+            unreachable, the app falls back to a deterministic explanation built from the same
+            verified metrics, so the public demo stays functional without live API access.
           </p>
           <div class="metrics">
             <div class="metric"><span class="metric-val mono">112,650</span><span class="metric-lbl">Rows modeled</span></div>
             <div class="metric"><span class="metric-val mono">7</span><span class="metric-lbl">Datasets integrated</span></div>
-            <div class="metric"><span class="metric-val mono">40</span><span class="metric-lbl">Automated tests</span></div>
+            <div class="metric"><span class="metric-val mono">42</span><span class="metric-lbl">Automated tests</span></div>
           </div>
           <div class="stack">
             <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">DuckDB</span>
@@ -203,7 +205,8 @@
             <span class="chip">Plotly</span>
           </div>
           <div class="case-actions">
-            <a class="btn btn-primary" href="project-groundediq.html">Read case study →</a>
+            <a class="btn btn-primary" href="https://groundediq-asim.streamlit.app" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+            <a class="btn btn-ghost" href="project-groundediq.html">Read case study →</a>
             <a class="btn btn-ghost" href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener noreferrer">Source ↗</a>
           </div>
         </div>

@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GroundedIQ — Evidence-Grounded Analytics Copilot — Asim Ahmed</title>
-<meta name="description" content="Case study: an analytics copilot that answers business questions with deterministic SQL and Python instead of free-form LLM output, built by Asim Ahmed.">
+<meta name="description" content="Case study: a publicly deployed analytics copilot that answers business questions with deterministic SQL and Python, with the LLM demoted to an optional explanation layer, built by Asim Ahmed.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -36,7 +36,9 @@
     <h1>GroundedIQ — Evidence-Grounded Analytics Copilot</h1>
     <p class="lede">
       An analytics copilot that answers business questions with deterministic SQL and Python —
-      not a free-form LLM guess — with evidence and explicit warnings attached.
+      not a free-form LLM guess — with evidence and explicit warnings attached. Now publicly
+      deployed with the LLM demoted to an optional layer: if it's unavailable, the app still
+      answers from verified evidence.
     </p>
     <div class="case-meta reveal">
       <div><span class="case-meta-lbl">Role</span>Solo — data modeling, text-to-SQL, guardrail design</div>
@@ -44,6 +46,7 @@
       <div><span class="case-meta-lbl">Stack</span>Python · SQL · DuckDB · Pydantic · OpenAI SDK · Streamlit · Plotly</div>
     </div>
     <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://groundediq-asim.streamlit.app" target="_blank" rel="noopener noreferrer">Live demo</a>
       <a class="btn btn-ghost" href="https://github.com/asim-aa/evidence-grounded-analytics-copilot" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
     </div>
   </div>
@@ -108,9 +111,24 @@
       <div class="metrics">
         <div class="metric"><span class="metric-val mono">112,650</span><span class="metric-lbl">Rows modeled</span></div>
         <div class="metric"><span class="metric-val mono">7</span><span class="metric-lbl">Datasets integrated</span></div>
-        <div class="metric"><span class="metric-val mono">40</span><span class="metric-lbl">Automated tests</span></div>
+        <div class="metric"><span class="metric-val mono">42</span><span class="metric-lbl">Automated tests</span></div>
       </div>
-      <p>Built with Streamlit for the interface and Plotly for visual output, backed by 40 automated tests covering the query-generation and guardrail logic.</p>
+      <p>Built with Streamlit for the interface and Plotly for visual output, backed by 42 automated tests covering the query-generation, guardrail, and fallback logic.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Hardening for public deployment</h3>
+      <p>
+        After the initial build, I removed the explanation layer's sole dependency on an external
+        LLM API — a single point of failure for a demo meant to be public and always reachable.
+        The explanation step now branches off the same verified <code>EvidenceResult</code>: if
+        the LLM is configured and reachable, it produces a grounded natural-language explanation;
+        if credentials are missing or the provider fails, the app falls back to a deterministic
+        explanation assembled directly from the same verified metrics, with nothing invented or
+        recalculated. I added regression tests covering both the fallback path and missing-LLM
+        configuration, then deployed publicly on Streamlit Community Cloud, which bootstraps the
+        Olist dataset and DuckDB database automatically on a fresh instance.
+      </p>
     </div>
 
     <div class="case-block reveal">
@@ -119,7 +137,10 @@
         LLM output is most trustworthy when it's constrained to producing something checkable —
         a query, a structured plan — rather than a final answer directly. That constraint is what
         makes the guardrails possible in the first place, and it's a pattern I now default to
-        whenever an LLM is in the loop on something that needs to be defensible.
+        whenever an LLM is in the loop on something that needs to be defensible. The same instinct
+        extended to deployment: treating the LLM as an optional enhancement rather than a hard
+        dependency means the system degrades gracefully instead of failing outright when an
+        external API is unavailable.
       </p>
     </div>
   </div>
