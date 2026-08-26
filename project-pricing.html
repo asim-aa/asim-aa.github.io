@@ -113,6 +113,69 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Process: baselines before complexity</h3>
+      <p>
+        Before trusting CatBoost's error number, I compared it against two simpler approaches
+        of increasing complexity: a single global median price, and a hierarchical segment
+        median keyed on manufacturer, model, and age. The segment median set the strongest
+        stable baseline; a Ridge regression was also tried but produced an extreme prediction
+        on a rare feature combination, a reminder that an aggregate metric alone can hide a
+        real failure case.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Model</th><th>MAE</th><th>RMSE</th><th>Median absolute error</th></tr></thead>
+          <tbody>
+            <tr><td>Global median</td><td>$10,790.70</td><td>$14,497.19</td><td>$9,778.00</td></tr>
+            <tr><td>Hierarchical segment median</td><td>$5,036.32</td><td>$9,204.85</td><td>$2,797.50</td></tr>
+            <tr><td>CatBoost</td><td>$3,515.95</td><td>$7,351.12</td><td>$1,784.57</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>CatBoost cut MAE by roughly $1,520 per listing versus the strongest stable baseline, a 30.2% improvement.</p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Process: where coverage actually breaks down</h3>
+      <p>
+        Split conformal prediction turns calibration residuals into empirical intervals at any
+        nominal level; the 90% interval is the headline number, but checking all three nominal
+        levels against their actual test coverage shows the same undercoverage pattern holding
+        across the board, worse in the later, more recent slice of the chronological test period.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Nominal interval</th><th>Calibration quantile</th><th>Test coverage</th><th>Average width</th></tr></thead>
+          <tbody>
+            <tr><td>80%</td><td>$4,270.11</td><td>76.66%</td><td>$8,363.29</td></tr>
+            <tr><td>90%</td><td>$6,981.67</td><td>87.88%</td><td>$13,204.86</td></tr>
+            <tr><td>95%</td><td>$10,290.61</td><td>93.67%</td><td>$18,551.35</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Splitting the 90% interval by segment is what actually locates the risk: overall coverage
+        near nominal conceals segments running far below it.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Segment</th><th>90% empirical coverage</th><th>MAE</th></tr></thead>
+          <tbody>
+            <tr><td>Vehicles priced $50k+</td><td>23.47%</td><td>$20,472</td></tr>
+            <tr><td>Porsche</td><td>54.76%</td><td>$14,831</td></tr>
+            <tr><td>Vehicles priced $35k–$50k</td><td>60.23%</td><td>$7,051</td></tr>
+            <tr><td>Vehicles aged 0–2 years</td><td>69.15%</td><td>$7,582</td></tr>
+            <tr><td>Vehicles under 25k miles</td><td>70.61%</td><td>$7,465</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Acceptable marginal coverage does not imply reliable performance for every market segment,
+        which is the whole reason the subgroup audit exists rather than stopping at the headline number.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         An interval's nominal coverage rate is a starting point, not a conclusion: the same
