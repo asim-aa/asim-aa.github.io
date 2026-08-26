@@ -114,6 +114,27 @@
       let boost = 0;
       let lastT = null;
 
+      // mouse-follow tilt: only for real cursors, not touch, and only here
+      // since this whole branch already means motion is welcome
+      const compScene = document.querySelector('.comp-scene');
+      const canHover = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      let tiltX = 0, tiltY = 0, tiltTX = 0, tiltTY = 0;
+      if (compScene && canHover) {
+        const maxTiltX = 10; // deg, up/down look
+        const maxTiltY = 18; // deg, left/right look
+        compScene.addEventListener('mousemove', (e) => {
+          const rect = compScene.getBoundingClientRect();
+          const relX = (e.clientX - rect.left) / rect.width - 0.5;
+          const relY = (e.clientY - rect.top) / rect.height - 0.5;
+          tiltTX = -relY * maxTiltX;
+          tiltTY = relX * maxTiltY;
+        });
+        compScene.addEventListener('mouseleave', () => {
+          tiltTX = 0;
+          tiltTY = 0;
+        });
+      }
+
       const frame = (t) => {
         if (lastT === null) lastT = t;
         const dt = Math.min(t - lastT, 50); // clamp so a backgrounded tab can't jump
@@ -121,7 +142,10 @@
         angle += (baseSpeed + boost) * dt;
         boost *= Math.pow(0.04, dt / 1000); // quick exponential decay after a click
         if (boost < 0.0004) boost = 0;
-        compRig.style.transform = 'rotateX(-10deg) rotateY(' + angle + 'deg)';
+        const tiltEase = 1 - Math.pow(0.001, dt / 1000); // frame-rate-independent settle
+        tiltX += (tiltTX - tiltX) * tiltEase;
+        tiltY += (tiltTY - tiltY) * tiltEase;
+        compRig.style.transform = 'rotateX(' + (-10 + tiltX) + 'deg) rotateY(' + (angle + tiltY) + 'deg)';
         requestAnimationFrame(frame);
       };
       requestAnimationFrame(frame);
