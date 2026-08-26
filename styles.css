@@ -321,8 +321,8 @@
   .comp-scene::after{
     content:'';position:absolute;left:50%;
     bottom:calc(var(--cs) * 14 / 300);
-    width:calc(var(--cs) * 190 / 300);height:calc(var(--cs) * 26 / 300);
-    margin-left:calc(var(--cs) * -95 / 300);border-radius:50%;
+    width:calc(var(--cs) * 210 / 300);height:calc(var(--cs) * 26 / 300);
+    margin-left:calc(var(--cs) * -105 / 300);border-radius:50%;
     background:radial-gradient(ellipse at center, rgba(0,0,0,.5), transparent 72%);
     filter:blur(3px);
   }
@@ -335,10 +335,12 @@
 
   .monitor{
     position:absolute;left:50%;
-    top:calc(var(--cs) * 6 / 300);
+    top:calc(var(--cs) * 54 / 300);
     width:calc(var(--cs) * 190 / 300);height:calc(var(--cs) * 132 / 300);
     margin-left:calc(var(--cs) * -95 / 300);
     transform-style:preserve-3d;
+    transform-origin:bottom center;
+    transform:rotateX(14deg);
   }
   .m-face{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden}
   .m-front{
@@ -389,24 +391,6 @@
   }
   .m-brand span{color:var(--accent)}
 
-  .neck{
-    position:absolute;left:50%;
-    top:calc(var(--cs) * 138 / 300);
-    width:calc(var(--cs) * 18 / 300);height:calc(var(--cs) * 30 / 300);
-    margin-left:calc(var(--cs) * -9 / 300);
-    background:linear-gradient(90deg,#0a0f16,#1a2431,#0a0f16);
-    transform:translateZ(0)
-  }
-  .base{
-    position:absolute;left:50%;
-    top:calc(var(--cs) * 158 / 300);
-    width:calc(var(--cs) * 72 / 300);height:calc(var(--cs) * 72 / 300);
-    margin-left:calc(var(--cs) * -36 / 300);
-    border-radius:50%;
-    background:radial-gradient(circle at 38% 32%, #263243, #0a0f16 72%);
-    border:1px solid #232f3c;
-    transform:rotateX(90deg);
-  }
 
   .keyboard{
     position:absolute;left:50%;
