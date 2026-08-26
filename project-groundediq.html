@@ -117,6 +117,62 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Process: the evidence contract</h3>
+      <p>
+        Every analytical handler returns the same typed contract, shown below exactly as it is in
+        the codebase. Analytics functions calculate facts, this object packages them consistently,
+        and both the LLM explanation and the deterministic fallback render from it unchanged.
+      </p>
+      <pre class="evidence-code"><code>class EvidenceResult(BaseModel):
+    question: str
+    analysis_type: AnalysisType
+    supported: bool
+    summary: str
+    metrics: dict[str, Any]
+    supporting_rows: list[dict[str, Any]]
+    methodology: dict[str, Any]
+    warnings: list[str]</code></pre>
+      <p>
+        The grain-safety rules below are the actual guards in the pipeline: each one exists because
+        summing at the wrong grain silently inflates a number that still looks correct.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Concern</th><th>Implemented rule</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue</td><td>SUM(item_price) at the order-item grain</td></tr>
+            <tr><td>Order count</td><td>COUNT(DISTINCT order_id)</td></tr>
+            <tr><td>Average order value</td><td>Item revenue divided by distinct orders</td></tr>
+            <tr><td>Payments</td><td>Aggregated to one row per order before joining</td></tr>
+            <tr><td>Reviews</td><td>Aggregated to one row per order before joining</td></tr>
+            <tr><td>Delivery / review comparisons</td><td>Reduced to one row per order before aggregation</td></tr>
+            <tr><td>Incomplete months</td><td>Excluded below the dataset-specific minimum order threshold</td></tr>
+            <tr><td>Small geographic samples</td><td>State delivery rankings require a minimum order count</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>How it evolved</h3>
+      <p>Built in seven phases, each one adding a layer rather than replacing the last.</p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Phase</th><th>Change introduced</th><th>Outcome</th></tr></thead>
+          <tbody>
+            <tr><td>1. Trusted data layer</td><td>Raw-file validation, DuckDB staging tables, analytical-table construction, integrity checks</td><td>Reproducible ETL pipeline with a defined order-item grain</td></tr>
+            <tr><td>2. Semantic intelligence</td><td>Table profiling, semantic column roles, business definitions, aggregation warnings</td><td>Machine-readable understanding of how the data should be used</td></tr>
+            <tr><td>3. Analytics engine</td><td>Core KPIs, revenue segmentation, delivery analysis, review coverage, robust statistics</td><td>Reusable and tested business calculations</td></tr>
+            <tr><td>4. Evidence engine</td><td>Deterministic router, handler registry, multi-step investigations, standardized evidence objects</td><td>Natural-language questions mapped to inspectable analytical evidence</td></tr>
+            <tr><td>5. Explanation layer</td><td>OpenAI-compatible client, prompt guardrails, dependency injection, deterministic fallback</td><td>Readable explanations without giving the model ownership of the numbers</td></tr>
+            <tr><td>6. Productization</td><td>Streamlit interface, session history, contextual follow-ups, safe context rules, charts, runtime stabilization</td><td>Working end-to-end evidence-grounded BI application</td></tr>
+            <tr><td>7. Public deployment</td><td>Streamlit Cloud deployment, automatic dataset/database bootstrap, relaxed Python patch pin</td><td>Recruiter-accessible live application without committing data artifacts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="case-block reveal">
       <h3>Hardening for public deployment</h3>
       <p>
         After the initial build, I removed the explanation layer's sole dependency on an external
