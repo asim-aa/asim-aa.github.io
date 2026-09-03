@@ -247,10 +247,55 @@
     background:var(--proj-c-lt, var(--accent));
     border-color:var(--proj-c-lt, var(--accent));
   }
+  .theme-gold{--proj-c:#f5b544;--proj-c-rgb:245,181,68;--proj-c-lt:#a8720c;--proj-c-lt-rgb:168,114,12}
+
+  /* ---------- flagship project treatment ---------- */
+  .flagship-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--proj-c, var(--amber));
+    background:rgba(var(--proj-c-rgb, 245,181,68), .12);
+    border:1px solid rgba(var(--proj-c-rgb, 245,181,68), .32);
+    padding:5px 12px;border-radius:20px;margin-bottom:14px;
+  }
+  :root[data-theme="light"] .flagship-badge{
+    color:var(--proj-c-lt, #a8720c);
+    background:rgba(var(--proj-c-lt-rgb, 168,114,12), .1);
+    border-color:rgba(var(--proj-c-lt-rgb, 168,114,12), .3);
+  }
+  .case-card.flagship{
+    background:var(--bg-card);border:1px solid rgba(var(--proj-c-rgb, 245,181,68), .28);
+    border-radius:20px;padding:32px;
+    box-shadow:0 40px 90px -46px rgba(var(--proj-c-rgb, 245,181,68), .4);
+  }
+  .card.flagship{border-color:rgba(var(--proj-c-rgb, 245,181,68), .32)}
+  .card.flagship::before{background:linear-gradient(180deg, var(--proj-c, var(--amber)), transparent);opacity:1}
+  .card.flagship .btn-primary{background:var(--proj-c, var(--amber));border-color:var(--proj-c, var(--amber));color:#1a1204}
+  :root[data-theme="light"] .card.flagship .btn-primary{background:var(--proj-c-lt, #a8720c);border-color:var(--proj-c-lt, #a8720c);color:#fff}
+
+  /* terminal-style mockup for projects without a screenshot (e.g. CLI/pipeline tools) */
+  .mockup-code{
+    aspect-ratio:16/10;background:#0b0f14;display:flex;flex-direction:column;
+    font-family:var(--font-mono);overflow:hidden;
+  }
+  .mockup-code .mockup-bar{display:flex;gap:6px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);flex:none}
+  .mockup-code .mockup-bar i{width:10px;height:10px;border-radius:50%;display:block}
+  .mockup-code .mockup-bar i:nth-child(1){background:#ff5f57}
+  .mockup-code .mockup-bar i:nth-child(2){background:#febc2e}
+  .mockup-code .mockup-bar i:nth-child(3){background:#28c840}
+  .mockup-code pre{
+    flex:1;margin:0;padding:18px 22px;font-size:12px;line-height:1.85;
+    color:#c7d4e0;overflow:auto;white-space:pre;
+  }
+  .mockup-code .ok{color:#3ddc97;font-weight:600}
+  .mockup-code .bad{color:#ff6b6b;font-weight:600}
+  .mockup-code .warn{color:#f5b544;font-weight:600}
+  .mockup-code .dim{color:#5b6878}
 
   @media(max-width:820px){
     .case-card{grid-template-columns:1fr;gap:22px}
     .case-card:nth-child(even) .case-media{order:0}
+    .case-card.flagship{padding:22px}
   }
 
   /* ---------- more grid ---------- */

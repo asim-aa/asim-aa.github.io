@@ -54,6 +54,66 @@
 
     <div class="case-grid">
 
+      <article class="case-card flagship reveal theme-gold" data-cats="featured agents ml">
+        <div class="case-media">
+          <div class="mockup">
+            <div class="mockup-code">
+              <div class="mockup-bar"><i></i><i></i><i></i></div>
+              <pre>$ disclosure-verifier reconcile --filing NVDA/FY2026-10K
+
+<span class="dim">verdict         claim                        value</span>
+<span class="ok">consistent</span>      Revenue                      $215,900,000,000
+                <span class="dim">(EDGAR: $215,938,000,000 – 0.02% off)</span>
+<span class="bad">inconsistent</span>    Revenue growth               65.0%
+                <span class="dim">(EDGAR implies 46.09%)</span>
+<span class="ok">consistent</span>      Income tax expense           $21,400,000,000
+                <span class="dim">(EDGAR: $21,383,000,000 – 0.08% off)</span>
+<span class="warn">unverifiable</span>    Data Center revenue          68.0% growth
+                <span class="dim">(segment-level, no XBRL tag)</span>
+
+<span class="dim">122 real restatement matches · 96.7% flagged early</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <span class="flagship-badge">★ Flagship · SupportVectors AI Agents Bootcamp Capstone</span>
+          <div class="case-card-meta">
+            <span class="case-tag">Applied AI &amp; Agents · Machine Learning</span>
+            <span class="case-date mono">Aug 2026</span>
+          </div>
+          <h3>The Disclosure Verifier</h3>
+          <p class="case-tagline">Catches SEC disclosure inconsistencies before the company itself admits them.</p>
+          <div class="case-role">Agentic system design · MCP tools · DSPy optimization · RLVR fine-tuning</div>
+          <p class="case-desc">
+            An agentic pipeline that extracts every quantitative claim from a company's SEC MD&amp;A
+            prose and reconciles it against that filing's own structured XBRL data, with exact
+            citations. Three custom MCP tool servers handle filing retrieval, MD&amp;A extraction, and
+            numerical reconciliation; a DSPy-optimized ChainOfThought signature does the extracting;
+            and a hierarchical <b>Coordinator → Extraction → Verification → Reconciliation</b> pipeline
+            enforces a budget and checkpoints so a crash never loses progress. Backtested against
+            <b>13,827 real SEC restatement fingerprints across 541 companies</b>, it matched 122 real
+            prose instances and would have flagged <b>96.7% of them as inconsistent</b> using only the
+            data that existed before each restatement happened.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="metric-val mono">96.7%</span><span class="metric-lbl">Real restatements caught early</span></div>
+            <div class="metric"><span class="metric-val mono">$11.31</span><span class="metric-lbl">Cost to scan the whole S&amp;P 500</span></div>
+            <div class="metric"><span class="metric-val mono">0.855</span><span class="metric-lbl">Verification accuracy, post-RLVR</span></div>
+            <div class="metric"><span class="metric-val mono">260</span><span class="metric-lbl">Automated tests</span></div>
+          </div>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">DSPy</span><span class="chip">MCP</span>
+            <span class="chip">Unsloth · QLoRA</span><span class="chip">GRPO / RLVR</span>
+            <span class="chip">SEC EDGAR &amp; XBRL</span><span class="chip">pytest</span><span class="chip">GitHub Actions</span>
+          </div>
+          <div class="case-actions">
+            <a class="btn btn-primary" href="https://github.com/asim-aa/disclosure-verifier/blob/main/docs/demo.pdf" target="_blank" rel="noopener noreferrer">View exhibit ↗</a>
+            <a class="btn btn-ghost" href="project-disclosure.html">Read case study →</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/disclosure-verifier" target="_blank" rel="noopener noreferrer">Source ↗</a>
+          </div>
+        </div>
+      </article>
+
       <article class="case-card reveal theme-blue" data-cats="featured ml data-science">
         <div class="case-media">
           <div class="mockup">

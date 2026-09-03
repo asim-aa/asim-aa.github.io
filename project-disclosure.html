@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Disclosure Verifier | Asim Ahmed</title>
+<meta name="description" content="Case study: an agentic system that reconciles SEC MD&amp;A claims against XBRL data and catches real disclosure inconsistencies before restatement, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="about.html#contact">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <span class="flagship-badge reveal">★ Flagship · SupportVectors AI Agents Bootcamp Capstone</span>
+    <div class="eyebrow">Case Study · Aug 2026</div>
+    <h1>The Disclosure Verifier</h1>
+    <p class="lede">
+      An agentic system that extracts quantitative claims from SEC filing prose and reconciles
+      them against the filing's own structured data, catching disclosure inconsistencies before
+      anyone else cross-checks them.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo: agent architecture, MCP tools, DSPy optimization, RLVR fine-tuning</div>
+      <div><span class="case-meta-lbl">Timeline</span>SupportVectors AI Agents &amp; Fine-Tuning Bootcamp capstone, Phases 0–7</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · DSPy · MCP · Unsloth QLoRA · GRPO (trl) · SEC EDGAR &amp; XBRL · pytest · GitHub Actions</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://github.com/asim-aa/disclosure-verifier/blob/main/docs/demo.pdf" target="_blank" rel="noopener noreferrer">View exhibit</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/disclosure-verifier" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        SEC filings publish the same information twice, in two formats that almost nobody
+        cross-checks against each other: free-text Management Discussion &amp; Analysis (MD&amp;A)
+        prose, written for a human reader, and structured XBRL data, tagged for machines. A company
+        can write "revenue grew 65%" in its MD&amp;A while its own XBRL facts imply 46.09%, and unless
+        someone reads both and does the arithmetic, that gap goes unnoticed. It's exactly the kind
+        of error that tends to precede a restatement, and it's invisible at scale because checking it
+        by hand doesn't scale. I built a system to make that check economical enough to run on
+        every filing, not just the ones already under scrutiny.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Architecture: four pillars</h3>
+      <p>
+        The bootcamp's capstone required a Bring-Your-Own-Project spanning four pillars instead of
+        one of six provided briefs. I designed the pipeline as a deterministic, non-looping sequence
+        so each pillar has a clear, auditable job:
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Pillar</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>MCP tools</td><td>Three independent servers: a Filing Retriever (EDGAR 10-K/10-Q + XBRL company facts), an MD&amp;A Extractor (prose with citations), and a Numerical Reconciler (four comparison types: absolute, growth %, absolute change, bps change)</td></tr>
+            <tr><td>DSPy optimization</td><td>A ChainOfThought signature for claim extraction, tuned with BootstrapFewShot / GEPA against a held-out, hand-labeled ground truth with explicit noise-floor checks</td></tr>
+            <tr><td>Multi-agent orchestration</td><td>A hierarchical Coordinator → Extraction Agent → Verification Agent → Reconciliation pipeline that never loops back, with budget enforcement and checkpoint/resume so a crash mid-run doesn't lose progress</td></tr>
+            <tr><td>RLVR / GRPO fine-tuning</td><td>QLoRA (rank 32, via Unsloth) on Qwen2.5-7B-Instruct, trained on a single RTX 4090 with a reconciler-derived reward signal across 1,300–2,730 GRPO steps</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The pipeline itself runs as seven deterministic stages: Filing Retriever → MD&amp;A Extractor →
+        Coordinator (budget and checkpointing) → Extraction Agent (DSPy ChainOfThought) →
+        Verification Agent (concept resolution) → Numerical Reconciler → a cited report.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        The Reconciler is deterministic code, not an LLM judgment call, on purpose. I tested a
+        naive LLM-only judge against it head-to-head: the deterministic reconciler won 15 of 15
+        adversarial test cases with zero false-"consistent" verdicts, versus 49% accuracy for the
+        LLM-only approach on the same real restatement data where the deterministic version hit
+        96.7%. Letting a model eyeball whether two numbers "basically match" turned out to be far
+        less reliable than just doing the math.
+      </p>
+      <p>
+        Fact matching is bitemporal: every XBRL value is resolved <code>as_of</code> the filing
+        date it's being checked against, so a later restatement's corrected numbers can't bleed
+        backward and quietly rewrite what counted as "consistent" at the time. And extraction is
+        reasoning-first: the DSPy signature produces a chain of thought before the structured
+        claim, which measurably outperformed jumping straight to structured output (zero-shot F1
+        0.784 vs. a 0.730 hand-written baseline).
+      </p>
+      <p>
+        The Verification Agent's job is narrower than it sounds, and that narrowness is what makes
+        the whole system trustworthy: on audit it hit recall 1.000 and a false-positive rate of
+        0.000, which puts a ceiling of 1.000 on end-to-end accuracy regardless of how good or bad
+        the upstream extraction is. A maker/checker split, where the checker is provably strict,
+        matters more here than a marginally smarter extractor.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Making extraction and verification better</h3>
+      <p>
+        DSPy optimization moved extraction F1 from a 0.730 hand-written baseline to 0.784
+        zero-shot (precision 0.763, recall 0.806); a fresh holdout of companies never touched
+        during development showed a larger +0.355 F1 gain, the more trustworthy of the two signals
+        since it isn't at risk of overfitting to the dev set.
+      </p>
+      <p>
+        RLVR/GRPO fine-tuning on Qwen2.5-7B-Instruct then closed the gap on the hardest failure
+        mode in a system like this: calling something "consistent" when it isn't. That
+        false-consistent rate dropped from 0.148 to 0.036, a 0.112 absolute reduction, while overall
+        accuracy rose from 0.766 to 0.855 and output-format failures went from 1-in-304 to 0-in-304.
+        For a verification system, cutting the rate of confidently-wrong "all clear" verdicts
+        matters more than the raw accuracy number around it.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results: does it catch real errors?</h3>
+      <p>
+        The test that actually matters isn't a held-out benchmark, it's whether the system would
+        have caught real disclosure problems before anyone knew to look. I scanned
+        <b>13,827 real SEC restatement fingerprints across 541 companies</b> and matched the
+        pipeline's extraction against 122 real prose instances tied to those restatements. Using
+        only the data that existed at the time, contemporaneous, not retroactively corrected, the
+        system flagged <b>118 of 122 (96.7%)</b> as inconsistent before each restatement happened.
+      </p>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">96.7%</span><span class="metric-lbl">Real restatements flagged early</span></div>
+        <div class="metric"><span class="metric-val mono">122</span><span class="metric-lbl">Matched real prose instances</span></div>
+        <div class="metric"><span class="metric-val mono">541</span><span class="metric-lbl">Companies in the backtest</span></div>
+        <div class="metric"><span class="metric-val mono">$11.31</span><span class="metric-lbl">Cost: full S&amp;P 500 10-K scan</span></div>
+        <div class="metric"><span class="metric-val mono">260</span><span class="metric-lbl">Automated tests</span></div>
+      </div>
+      <p>
+        The cost figure is for the entire S&amp;P 500 index's full annual 10-K filings in one pass,
+        not one company, which is what makes routine, index-wide checking economical instead of a
+        boutique audit exercise.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Live example: NVDA's FY2026 10-K</h3>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Verdict</th><th>Claim</th><th>MD&amp;A value</th><th>Reconciliation</th></tr></thead>
+          <tbody>
+            <tr><td>Consistent</td><td>Revenue</td><td>$215,900,000,000</td><td>EDGAR: $215,938,000,000 – 0.02% off</td></tr>
+            <tr><td>Inconsistent</td><td>Revenue growth</td><td>65.0%</td><td>EDGAR implies 46.09%</td></tr>
+            <tr><td>Consistent</td><td>Income tax expense</td><td>$21,400,000,000</td><td>EDGAR: $21,383,000,000 – 0.08% off</td></tr>
+            <tr><td>Unverifiable</td><td>Data Center revenue growth</td><td>68.0%</td><td>Segment-level, no XBRL tag exists to check against</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        That fourth row is deliberate: the system marks a claim <b>unverifiable</b> rather than
+        guessing when no structured tag exists to check it against, the same honesty-under-uncertainty
+        principle behind the calibration and conformal-prediction work elsewhere on this site.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Process: finding out where it breaks</h3>
+      <p>
+        A fresh-holdout validation on AMZN and AAPL, companies never seen during development,
+        raised extraction resolution from 13.6% to 44.1% once I started treating holdout failures
+        as bugs to fix rather than noise to average away. A follow-up specificity check across
+        8 more untouched companies (ADBE, CRM, ORCL, CSCO, INTU, IBM, QCOM, TXN) surfaced and fixed
+        11 separate root causes, string-matching ambiguity, unit bugs, bitemporal logic errors,
+        period-selection bugs, and XBRL concept retagging among them, none of which showed up on
+        paper until the system met filings it hadn't been tuned against.
+      </p>
+      <p>
+        Every remaining limitation is documented rather than hidden: segment-level claims that
+        can't be resolved without dimensional XBRL tagging, calendar-month quarters that aren't
+        parsed yet, and open GAAP/non-GAAP ambiguity in some MD&amp;A language. The "unverifiable"
+        verdict exists specifically so the system says so instead of quietly guessing.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        The most valuable failures in this project came from bitemporal logic and XBRL tagging
+        edge cases that no amount of reasoning on paper would have surfaced, only running the
+        system against real, unseen filings did. That's the same lesson as the NBA project's
+        walk-forward backtest, but sharper here: a maker/checker split with a provably strict
+        checker can put a hard ceiling on how wrong the whole system can be, even when the maker
+        (extraction) is still imperfect. I'd reach for that pattern again anywhere the cost of a
+        confident false negative is high.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="projects.html">← All projects</a>
+  <a class="btn btn-ghost" href="project-nba.html">Next: NBA Win-Probability Platform →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
