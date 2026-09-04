@@ -605,6 +605,8 @@
     aspect-ratio:21/9;background:var(--bg-soft);
   }
   .res-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .evidence-figure{margin-top:16px;border-radius:12px;overflow:hidden;background:var(--bg-soft)}
+  .evidence-figure img{width:100%;display:block}
   .res-top{display:flex;justify-content:space-between;align-items:center}
   .res-type{
     font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;

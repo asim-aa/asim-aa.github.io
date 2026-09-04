@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML Classifier Benchmark Study | Asim Ahmed</title>
+<meta name="description" content="Case study: a 180-run controlled benchmark of SVM, Random Forest, MLP, and KNN across five UCI datasets, replicating Caruana &amp; Niculescu-Mizil (2006), built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="about.html#contact">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · COGS 118A</div>
+    <h1>ML Classifier Benchmark Study</h1>
+    <p class="lede">
+      A controlled, 180-run comparison of four classifier families across five UCI datasets,
+      built to replicate the empirical methodology of Caruana &amp; Niculescu-Mizil (2006)
+      rather than just report one model's accuracy.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo: experiment harness, modeling, analysis, report</div>
+      <div><span class="case-meta-lbl">Scale</span>4 classifiers × 5 datasets × 3 splits × 3 trials = 180 runs</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · scikit-learn · pandas · GridSearchCV · Matplotlib</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://github.com/asim-aa/cogs118a-final-project/blob/main/report.pdf" target="_blank" rel="noopener noreferrer">Read the report ↗</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/cogs118a-final-project" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        "Which classifier should I use?" usually gets answered with a default or a rule of
+        thumb, not evidence. Caruana &amp; Niculescu-Mizil's 2006 study showed no single
+        classifier dominates across tasks, that performance is a function of the dataset, not
+        just the model. The goal here was to build a small, controlled version of that study
+        myself, rather than take its conclusions on faith: pick a handful of classifier
+        families, hold everything else fixed, and see whether the same patterns show up.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        Four classifier families spanning distinct modeling assumptions: an RBF-kernel SVM
+        (kernel methods), Random Forest (ensemble trees), an MLP (neural network), and KNN
+        (instance-based). Each ran against five UCI datasets chosen for range, not convenience,
+        Bank Marketing, Breast Cancer, Digits, Heart Disease, and Wine Quality, spanning 303 to
+        ~45,000 raw samples and socioeconomic, medical, handwriting, and chemistry domains.
+      </p>
+      <p>
+        Every dataset went through the same <code>ColumnTransformer</code>: numeric features
+        median-imputed and standardized, categorical features mode-imputed and one-hot encoded.
+        Each classifier was tuned via stratified 5-fold <code>GridSearchCV</code> over its own
+        hyperparameter grid, then evaluated at three train/test splits (20/80, 50/50, 80/20)
+        across three random-seed trials, 5 × 4 × 3 × 3 = 180 independent experiments in total.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        Preprocessing lives <em>inside</em> an sklearn <code>Pipeline</code> that gets passed
+        directly into <code>GridSearchCV</code>, not applied once up front, so imputation
+        statistics, scaling parameters, and one-hot categories are fit using only each fold's
+        training portion. Get this wrong and cross-validation quietly overstates every model's
+        real-world accuracy. Every trial also fixes <code>random_state</code> across the split,
+        the CV folds, and the stochastic models (RF, MLP), so comparisons across three seeds
+        are attributable to genuine variance, not just different draws lining up by luck.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">180</span><span class="metric-lbl">Controlled experiments</span></div>
+        <div class="metric"><span class="metric-val mono">5</span><span class="metric-lbl">UCI datasets</span></div>
+        <div class="metric"><span class="metric-val mono">4</span><span class="metric-lbl">Classifier families</span></div>
+        <div class="metric"><span class="metric-val mono">3×3</span><span class="metric-lbl">Splits × random-seed trials</span></div>
+      </div>
+      <p>
+        Random Forest came out most consistently strong, especially on Wine Quality and Heart
+        Disease, the two noisiest, weakest-signal datasets in the set. SVM won cleanly on
+        Breast Cancer and Digits, where the classes separate well and a kernel boundary pays
+        off. MLP was the most data-hungry: it trailed at the 20% training split and closed most
+        of that gap by 80%. KNN held up fine on the cleaner datasets but degraded on Wine
+        Quality and Heart, consistent with instance-based methods struggling as noise and
+        dimensionality rise. Digits and Breast Cancer sit near ceiling accuracy for every model;
+        Heart Disease and Wine Quality stay the hard cases throughout, exactly the kind of
+        dataset-dependence Caruana &amp; Niculescu-Mizil reported.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Process: mean test accuracy by dataset and split</h3>
+      <p>
+        Reproduced directly from the aggregated results CSV — the same file every figure in the
+        report is generated from, not a hand-picked run.
+      </p>
+      <div class="evidence-figure">
+        <img src="shots/benchmark.jpg" alt="Bar charts of mean test accuracy for SVM, Random Forest, MLP, and KNN across all five datasets and three train/test splits">
+      </div>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        A single accuracy number from a single model tells you almost nothing about whether it
+        generalizes; it takes a baseline, a second model, and a controlled sweep across
+        conditions before a result means anything. That's the same discipline behind the
+        baseline comparisons on the <a href="project-pricing.html">Marketplace Pricing</a> and
+        <a href="project-nba.html">NBA</a> projects, just applied here at the level of picking
+        a model family in the first place, before ever getting to feature engineering.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-groundediq.html">← GroundedIQ</a>
+  <a class="btn btn-ghost" href="projects.html">All projects →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
