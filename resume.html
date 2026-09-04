@@ -27,19 +27,6 @@
     <span><a href="https://www.linkedin.com/in/asim-ahmed-129450365/">LinkedIn</a></span>
   </div>
 
-  <h2>Experience</h2>
-  <div class="edu-block">
-    <div class="row">
-      <span class="org">SupportVectors</span>
-      <span class="when">Jun. – Aug. 2026</span>
-    </div>
-    <div class="sub"><span>AI Agents &amp; Fine-Tuning Cohort</span></div>
-    <div class="course">
-      Applied LLM agent and fine-tuning workflows to SEC filing verification, building toward
-      reliable, checkable outputs on real-world documents.
-    </div>
-  </div>
-
   <h2>Education</h2>
   <div class="edu-block">
     <div class="row">
@@ -51,26 +38,43 @@
       <span class="provost">Provost Honors, Spring 2025</span>
     </div>
     <div class="course">
-      <b>Relevant Coursework:</b> Advanced Machine Learning Methods, Supervised Machine Learning,
-      Artificial Intelligence, Statistical NLP, Data Analysis and Inference, Probability
+      <b>Relevant Coursework:</b> Advanced ML Methods, Supervised ML, Artificial Intelligence, Statistical NLP, Probability
     </div>
   </div>
+
+  <h2>Experience</h2>
   <div class="edu-block">
     <div class="row">
-      <span class="org">Las Positas College</span>
-      <span class="when">Jun. 2024</span>
+      <span class="org">SupportVectors</span>
+      <span class="when">Jun. – Aug. 2026</span>
     </div>
-    <div class="sub"><span>A.S. Mathematics and Computer Science</span></div>
+    <div class="sub"><span>AI Agents &amp; Fine-Tuning Cohort</span></div>
+    <div class="course">
+      Completed an applied program covering LLM agents, MCP tooling, DSPy optimization, and
+      parameter-efficient fine-tuning; capstone: <b>The Disclosure Verifier</b> (below).
+    </div>
   </div>
 
   <h2>Technical Skills</h2>
   <div class="skill-row"><span class="skill-key">Languages</span><span class="skill-val">Python, SQL, R</span></div>
-  <div class="skill-row"><span class="skill-key">Machine Learning</span><span class="skill-val">scikit-learn, CatBoost, PyTorch, Neural Networks, GRUs, Conformal Prediction, Feature Engineering, Model Evaluation</span></div>
-  <div class="skill-row"><span class="skill-key">Data &amp; Analytics</span><span class="skill-val">pandas, NumPy, DuckDB, SQLite, Tableau, Plotly, Statistical Analysis, Data Validation</span></div>
-  <div class="skill-row"><span class="skill-key">Generative AI</span><span class="skill-val">OpenAI SDK, Google ADK, LangGraph, LiteLLM, vLLM, Multi-Agent Workflows, Structured Outputs, Tool Calling</span></div>
-  <div class="skill-row"><span class="skill-key">Engineering</span><span class="skill-val">REST APIs, FastAPI, Streamlit, Pydantic, Git, GitHub Actions, pytest, Ruff, Jupyter, Excel</span></div>
+  <div class="skill-row"><span class="skill-key">Machine Learning &amp; Data</span><span class="skill-val">scikit-learn, PyTorch, CatBoost, pandas, NumPy, Conformal Prediction</span></div>
+  <div class="skill-row"><span class="skill-key">Generative AI</span><span class="skill-val">DSPy, MCP, LangGraph, Unsloth/QLoRA, GRPO/RLVR</span></div>
+  <div class="skill-row"><span class="skill-key">Engineering</span><span class="skill-val">FastAPI, Streamlit, Git, GitHub Actions, pytest</span></div>
 
   <h2>Projects</h2>
+
+  <div class="proj">
+    <div class="row">
+      <span class="proj-name">The Disclosure Verifier — SupportVectors AI Agents Bootcamp Capstone</span>
+      <span class="when">Aug. 2026</span>
+    </div>
+    <div class="stack">Python, DSPy, MCP, Unsloth/QLoRA, GRPO (Hugging Face TRL), SEC EDGAR &amp; XBRL, pytest, GitHub Actions</div>
+    <ul>
+      <li><span class="lead">Built an agentic SEC verification system with three MCP tool servers and a DSPy-optimized ChainOfThought extractor</span>, adding budgeted checkpoint/resume orchestration and QLoRA/GRPO (Hugging Face TRL) fine-tuning of Qwen2.5-7B-Instruct on a single RTX 4090.</li>
+      <li><span class="lead">Correctly flagged 118 of 122 (96.7%) real SEC restatement instances as inconsistent</span>, backtesting against 13,827 real SEC restatement fingerprints across 541 companies using only data that existed before each restatement happened, at a projected cost of $11.31 to scan every S&amp;P 500 company's full annual 10-K.</li>
+      <li><span class="lead">Raised extraction F1 from 0.730 to 0.784 via DSPy optimization, then cut the false-consistent rate from 0.148 to 0.036 via RLVR/GRPO fine-tuning</span> (accuracy 0.766 → 0.855); validated the deterministic reconciler against a naive LLM-only judge, winning 15/15 adversarial cases with zero false positives, backed by 260 automated tests.</li>
+    </ul>
+  </div>
 
   <div class="proj">
     <div class="row">
@@ -80,8 +84,8 @@
     <div class="stack">Python, pandas, scikit-learn, CatBoost, FastAPI, Streamlit, SQLite, pytest, Ruff, GitHub Actions</div>
     <ul>
       <li><span class="lead">Reached 0.738 ROC-AUC and 67.8% accuracy on a frozen 2,460-game test set</span>, building an 11-season pipeline with chronological splitting, a custom Elo engine, and a leakage-safe roster-continuity feature proxying player injuries from game logs; selected logistic regression over CatBoost.</li>
-      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games, hidden by the aggregate accuracy number, via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks.</li>
-      <li><span class="lead">Shipped to production behind 312 automated tests</span>, deploying a FastAPI prediction service and Streamlit dashboard on a shared feature-computation and serving layer, with scheduled CI keeping live features current.</li>
+      <li><span class="lead">Shipped to production behind 312 automated tests</span>, deploying a FastAPI prediction service and Streamlit pick-the-winner dashboard on a shared feature-computation layer across training and inference, with a scheduled GitHub Actions pipeline keeping live features current.</li>
+      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games, hidden by the aggregate accuracy number, via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks against the frozen model.</li>
     </ul>
   </div>
 
@@ -93,8 +97,8 @@
     <div class="stack">Python, LangGraph, Streamlit, OpenAI SDK, pytest, GitHub Actions</div>
     <ul>
       <li><span class="lead">Migrated a mock-data prototype to four live, keyless data sources at zero API cost</span>, architecting a LangGraph system with parallel flight/activity search, a budget-dependent sequential hotel stage, and a final itinerary compiler.</li>
-      <li><span class="lead">Cut repeat search latency from 1.15s to 0.00s</span> with a TTL cache, and eliminated hallucinated place names using a fact-checking guard that cross-references LLM output against ground-truth data.</li>
-      <li><span class="lead">Diagnosed and patched a silent data-loss bug</span> in a third-party scraping library that discarded valid results, and built an offline airport-disambiguation resolver with hub-connection fallback; backed by 102 tests, CI, and a public Streamlit deployment.</li>
+      <li><span class="lead">Diagnosed and patched a parsing bug</span> in a third-party scraping library that silently discarded valid results, and built an offline airport-disambiguation resolver with a hub-connection fallback for routes with no direct itinerary.</li>
+      <li><span class="lead">Cut repeat search latency from 1.15s to 0.00s</span> with a TTL cache, and built a fact-checking guard that cross-references LLM-generated recommendations against ground-truth data to prevent hallucinated place names; backed by 102 automated tests, CI via GitHub Actions, and a public Streamlit Community Cloud deployment.</li>
     </ul>
   </div>
 
@@ -105,22 +109,9 @@
     </div>
     <div class="stack">Python, pandas, scikit-learn, CatBoost, Conformal Prediction, Tableau, pytest, Ruff</div>
     <ul>
-      <li><span class="lead">Reduced test MAE by 30.2% versus the strongest stable baseline</span>, reaching $3,516 MAE on 41,746 held-out listings after comparing global median, hierarchical segment, Ridge, and CatBoost models.</li>
-      <li><span class="lead">Built a reproducible pipeline over 426,880 Craigslist vehicle listings</span> with 21-feature engineering, chronological splitting, and VIN-based leakage controls.</li>
+      <li><span class="lead">Developed a reproducible pricing pipeline for 426,880 Craigslist vehicle listings</span> with 21-feature engineering, chronological splitting, and VIN-based leakage controls.</li>
+      <li><span class="lead">Reduced test MAE by 30.2% versus the strongest stable baseline</span>, comparing global median, hierarchical segment, Ridge, and CatBoost models, achieving $3,516 MAE on 41,746 held-out listings.</li>
       <li><span class="lead">Identified severe undercoverage in $50K+ vehicles</span> through split conformal prediction and subgroup reliability audits, measuring 87.88% coverage against a nominal 90% target; published an interactive Tableau dashboard backed by 75 tests.</li>
-    </ul>
-  </div>
-
-  <div class="proj">
-    <div class="row">
-      <span class="proj-name">GroundedIQ: Evidence-Grounded Analytics Copilot</span>
-      <span class="when">Jul. 2026</span>
-    </div>
-    <div class="stack">Python, SQL, DuckDB, pandas, Streamlit, Plotly, Pydantic, OpenAI SDK, pytest, Ruff</div>
-    <ul>
-      <li><span class="lead">Converted natural-language business questions into deterministic SQL and Python analyses</span> with evidence-backed summaries and explicit warnings, rather than free-form model output.</li>
-      <li><span class="lead">Integrated seven Olist datasets into a validated 112,650-row DuckDB analytical model</span> with schema checks, explicit table grain, and safeguards against invalid aggregation.</li>
-      <li><span class="lead">Removed the LLM as a single point of failure for the public deployment</span>: the explanation layer now falls back to a deterministic summary built from the same verified metrics when the API is unavailable; deployed publicly on Streamlit Community Cloud, backed by 42 automated tests.</li>
     </ul>
   </div>
 
