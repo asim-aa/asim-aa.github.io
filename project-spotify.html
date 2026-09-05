@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spotify Taste Pipeline: A Product Case Study | Asim Ahmed</title>
+<meta name="description" content="Case study: an active-learning swipe interface that predicts which tracks to keep or remove from a 539-track Spotify library, built and shipped by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="about.html#contact">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Product</div>
+    <h1>Spotify Taste Pipeline</h1>
+    <p class="lede">
+      An active-learning swipe interface that learns a listener's taste from a handful of
+      keep/remove decisions, so cleaning up a stale Spotify library doesn't mean reviewing
+      the whole thing.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Sole builder — product decisions, engineering, and evaluation</div>
+      <div><span class="case-meta-lbl">Scale</span>539 real saved tracks, self-labeled across three rounds of swiping (35 → 105 → 198 labels)</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · scikit-learn · Streamlit · Spotify Web API · GitHub Contents API</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://spotify-taste-pipeline-rarbusmzvya9shyvgj9lxk.streamlit.app" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener noreferrer">Source on GitHub ↗</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        My Spotify library had grown to hundreds of saved tracks — liked songs, saved albums,
+        followed playlists — with no realistic way to review it. Scrolling and manually
+        deleting doesn't scale past a couple hundred items, and Spotify itself gives you no
+        tool for triaging a bloated library. The only "declutter" workflow available is unlink
+        everything and start over, which throws away years of good data along with the noise.
+      </p>
+      <p>
+        I framed the opportunity as a product question rather than a modeling one: can a small
+        amount of a user's own feedback (a swipe-to-keep/remove interface) teach a model to
+        predict what the rest of their library should do, so the user reviews less than their
+        whole collection to get most of the benefit?
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Users &amp; success criteria</h3>
+      <p>
+        <b>Primary user:</b> a listener with a large, stale Spotify library who wants it
+        cleaned up without a manual pass through every track. I defined success along two axes
+        going in: <b>learning efficiency</b> — does a classifier trained on the user's own
+        swipes beat a naive majority-class baseline, and does it keep improving as more labels
+        come in — and <b>real usage, not a demo</b> — the tool had to work against a live
+        account with real data, not a mocked dataset, and had to survive being handed to other
+        users, not just me.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Prioritization decisions (and what I said no to)</h3>
+      <p>
+        <b>The feature set was dictated by a moving platform, not by choice.</b> My original
+        plan used Spotify's audio-features endpoint (energy, valence, danceability) — the
+        obvious signal for a taste model. Spotify deprecated that endpoint for new apps in Nov
+        2024 and killed <code>preview_url</code> alongside it. The remaining option, genre from
+        the artist endpoint, turned out to be gated behind Extended Quota Mode, which requires
+        a registered business and 250k+ monthly active users — not a real path for a
+        single-user portfolio project. I dropped genre entirely rather than chase an approval I
+        couldn't get, and rebuilt the feature set around what was actually available: track and
+        album metadata, recency (days since added, play recency), and co-occurrence signals
+        (playlist count, same-artist saves).
+      </p>
+      <p>
+        <b>I chose an active-learning swipe loop over labeling the whole library up front.</b>
+        The product bet was that a user's tolerance for manual review is low, so the interface
+        needed to ask for feedback on the most informative tracks first, not a random sample.
+        That's a direct tradeoff of engineering complexity (active learning is harder to build
+        and validate than a static labeled set) against user effort — I prioritized the harder
+        build because the value proposition collapses if the user has to swipe on everything
+        anyway.
+      </p>
+      <p>
+        <b>I split "real data" from "demo data" when I opened the tool to other users.</b>
+        Multi-user deployment on Streamlit Cloud was capped at 5 testers by Spotify's
+        Development Mode limit, and I decided the owner's real swipe history should never mix
+        with a tester's session: testers get the full real experience against their own
+        Spotify account, but their swipes are session-only and never written to my dataset.
+        It would have been faster to log everyone's swipes to one file, but it would have
+        corrupted the one dataset the model actually depends on.
+      </p>
+      <p>
+        <b>I added a durability fix only after recognizing the risk, not before.</b> Streamlit
+        Cloud's filesystem doesn't persist, so the deployed app's <code>labels.csv</code> would
+        reset on redeploy — meaning live labeling could silently vanish. I built a GitHub
+        Contents API sync (auto-commit every 10 labels, plus a manual "sync now" button) and
+        tested the failure mode directly: a simulated conflicting write (stale SHA) was
+        correctly rejected instead of overwriting good data. I also hit and fixed a real
+        near-miss during testing where I briefly overwrote real label files myself — caught via
+        git before anything was lost.
+      </p>
+      <p>
+        <b>Model choice was decoupled from reporting.</b> RandomForest stayed the model driving
+        the live active-learning loop since it was already integrated and validated, but I
+        added a logistic regression comparison purely for the writeup once I had enough labels
+        to make the comparison meaningful — I didn't rip out a working production path to chase
+        a half-point of reported accuracy.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I cut</h3>
+      <p>
+        <b>Genre and popularity features</b> — blocked by Spotify's Extended Quota Mode
+        requirements, documented as a known limitation rather than worked around with a fake
+        proxy. <b>A visualization-only "lite" version</b> (PCA/t-SNE clustering of the library
+        colored by keep/remove, no model) was considered as a lower-effort alternative early
+        on, and dropped once the active-learning version proved feasible, because it would have
+        answered "what does my library look like" but not the actual product question, "what
+        should I do with it."
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">539</span><span class="metric-lbl">Real saved tracks evaluated</span></div>
+        <div class="metric"><span class="metric-val mono">198</span><span class="metric-lbl">Self-labeled swipes at final checkpoint</span></div>
+        <div class="metric"><span class="metric-val mono">68.6%</span><span class="metric-lbl">Accuracy at 198 labels (vs. 58.6% baseline)</span></div>
+        <div class="metric"><span class="metric-val mono">+20.0 pts</span><span class="metric-lbl">Best lift over baseline, at 35 labels</span></div>
+      </div>
+      <p>
+        Validated against my own real Spotify account and real self-labeled swipes, not
+        synthetic data, across three checkpoints: at 35 labels, RandomForest hit 74.3% accuracy
+        against a 54.3% baseline (+20.0 pts); at 105 labels, 62.9% against 52.4% (+10.5 pts);
+        and at 198 labels, logistic regression overtook RandomForest as the better model at
+        68.6% against a 58.6% baseline (+10.0 pts). The lift shrinks as the label count grows
+        because the class split moves closer to 50/50 — the early swipes were an easier, more
+        lopsided sample — a real finding about how this kind of self-labeled data behaves, not
+        just a number that goes up over time.
+      </p>
+      <p>
+        The two models also disagreed on which signals mattered most: RandomForest weighted
+        recency features (<code>days_since_added</code>, <code>release_year</code>) most
+        heavily, while logistic regression's strongest coefficients were
+        <code>play_recency_days</code> and <code>playlist_count</code>. Across both,
+        <code>artist_track_count</code> was the most consistent signal — tracks from artists
+        the user has saved many times before were kept far more often (10.2 average
+        same-artist saves for kept tracks vs. 1.6 for removed). I also shipped and
+        live-verified two derived features beyond prediction: one-click unsave/remove that
+        writes back to the real Spotify library, with idempotency verified (a repeat run added
+        zero duplicate changes), and an album-consolidation tool that merges small saved albums
+        into a single playlist without ever auto-removing the source album.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd do differently</h3>
+      <p>
+        Start the durability/sync design before opening the tool to any other user, not after —
+        I got lucky that the near-miss during testing was caught before real data loss. Collect
+        labels in a more balanced way from the start, mixing old and recently-added tracks
+        deliberately, rather than letting the natural order of the swipe queue skew the early
+        sample, since that's what caused the lift to look artificially strong at 35 labels.
+        And decide the model-selection criteria — accuracy vs. interpretability vs. production
+        stability — before running the comparison, rather than after; it happened to be a clean
+        story here, but that was partly luck.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-charrnn.html">← Character-Level RNN Architecture Study</a>
+  <a class="btn btn-ghost" href="projects.html">All projects →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

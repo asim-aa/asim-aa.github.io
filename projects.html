@@ -347,6 +347,54 @@
         </div>
       </article>
 
+      <article class="case-card reveal theme-gold" data-cats="ml data-science swe">
+        <div class="case-media">
+          <div class="mockup">
+            <div class="mockup-code">
+              <div class="mockup-bar"><i></i><i></i><i></i></div>
+              <pre>$ spotify-taste-pipeline --checkpoint
+
+<span class="dim">labels   model                accuracy   baseline   lift</span>
+<span class="ok">35</span>       RandomForest         74.3%      54.3%      <span class="ok">+20.0 pts</span>
+<span class="ok">105</span>      RandomForest         62.9%      52.4%      <span class="ok">+10.5 pts</span>
+<span class="ok">198</span>      LogisticRegression   68.6%      58.6%      <span class="ok">+10.0 pts</span>
+
+<span class="dim">539 real saved tracks · self-labeled swipes, not synthetic data</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-card-meta">
+            <span class="case-tag">Machine Learning · Data Science · SWE</span>
+            <span class="case-date mono">Product case study</span>
+          </div>
+          <h3>Spotify Taste Pipeline</h3>
+          <p class="case-tagline">An active-learning swipe interface that learns your taste so you review less than your whole library.</p>
+          <div class="case-role">Product decisions · Active learning · Data integrity &amp; durability engineering</div>
+          <p class="case-desc">
+            A swipe-to-keep/remove interface trained a classifier on a user's own labels across
+            a <b>539-track real Spotify library</b>, beating a majority-class baseline at every
+            checkpoint. Shipped with a GitHub Contents API sync to survive Streamlit Cloud's
+            non-persistent filesystem, a strict split between the owner's real labels and
+            testers' session-only data, and live-verified idempotent library writes.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="metric-val mono">539</span><span class="metric-lbl">Real tracks evaluated</span></div>
+            <div class="metric"><span class="metric-val mono">+20.0 pts</span><span class="metric-lbl">Best lift over baseline</span></div>
+            <div class="metric"><span class="metric-val mono">3</span><span class="metric-lbl">Labeling checkpoints compared</span></div>
+          </div>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">scikit-learn</span><span class="chip">Streamlit</span>
+            <span class="chip">Spotify Web API</span><span class="chip">GitHub Contents API</span>
+          </div>
+          <div class="case-actions">
+            <a class="btn btn-primary" href="https://spotify-taste-pipeline-rarbusmzvya9shyvgj9lxk.streamlit.app" target="_blank" rel="noopener noreferrer">Live demo ↗</a>
+            <a class="btn btn-ghost" href="project-spotify.html">Read case study →</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener noreferrer">Source ↗</a>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <div class="sec-head wide-top reveal">
@@ -359,11 +407,6 @@
         <div class="lang mono">Python</div>
         <h4>Bundesliga Player Valuation</h4>
         <p>Data science project modeling transfer-market value for Bundesliga footballers.</p>
-      </a>
-      <a class="mini reveal" data-cats="data-science swe" href="https://github.com/asim-aa/spotify-taste-pipeline" target="_blank" rel="noopener noreferrer">
-        <div class="lang mono">Python</div>
-        <h4>Spotify Taste Pipeline</h4>
-        <p>Personal listening-data ETL and analysis pipeline built on the Spotify Web API.</p>
       </a>
       <a class="mini reveal" data-cats="agents swe" href="https://github.com/asim-aa/multi-agent-assistant" target="_blank" rel="noopener noreferrer">
         <div class="lang mono">Python</div>
