@@ -176,6 +176,21 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        An 87.88% coverage rate against a 90% target reads like a passing grade, and I could have
+        stopped there. Instead I ran the subgroup audit that surfaced severe undercoverage on
+        $50K+ vehicles, because a pricing tool that quietly fails on exactly the transactions
+        where being wrong is most expensive isn't actually trustworthy, even if its aggregate
+        number looks fine. That same instinct shaped the modeling order: I made CatBoost beat a
+        global median and a hierarchical segment-median baseline before trusting its error
+        number, and I enforced VIN-based deduplication even though it made the pipeline more
+        work, because a model that's quietly memorizing relisted cars isn't actually predicting
+        anything.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         An interval's nominal coverage rate is a starting point, not a conclusion: the same

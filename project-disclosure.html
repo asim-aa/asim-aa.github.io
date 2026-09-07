@@ -202,6 +202,23 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I optimized for</h3>
+      <p>
+        A system that flags a real SEC inconsistency but occasionally cries wolf is worse than a
+        slower one that's actually trustworthy, so trust was the metric I optimized, not raw
+        model cleverness. I tested a plausible shortcut, letting an LLM judge whether two numbers
+        "basically matched," and rejected it once the deterministic reconciler beat it 15 of 15
+        on adversarial cases versus 49% accuracy on real restatement data. I also scoped the
+        Verification Agent narrowly on purpose, a checker that's provably strict rather than
+        comprehensive, because a hard ceiling on error mattered more than catching every edge
+        case, and I added an explicit "unverifiable" verdict so the system says "I can't tell"
+        instead of guessing. The cost figure ($11.31 for the full S&amp;P 500) wasn't an
+        afterthought either: it's what turns this from a one-off audit exercise into something
+        that could run routinely.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         The most valuable failures in this project came from bitemporal logic and XBRL tagging

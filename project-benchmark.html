@@ -129,6 +129,20 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        This was a coursework project, but the same discipline applied: I picked datasets "for
+        range, not convenience" (303 to roughly 45,000 samples, spanning socioeconomic, medical,
+        handwriting, and chemistry domains) specifically so the conclusion wouldn't be an artifact
+        of one easy dataset. And preprocessing lives inside the sklearn <code>Pipeline</code> that
+        gets passed into <code>GridSearchCV</code>, not applied once up front, purely because
+        getting that wrong quietly overstates every model's real-world accuracy. It's slower to
+        set up and easy to skip, and skipping it is exactly what makes a lot of published
+        benchmarks unreliable.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         A single accuracy number from a single model tells you almost nothing about whether it

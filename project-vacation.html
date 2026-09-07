@@ -159,6 +159,20 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        Once real APIs replaced the mock data, three different bugs surfaced, and each one got a
+        real fix instead of a workaround: a silent parsing bug in a third-party library got
+        patched at the source rather than papered over with a retry, and a hallucinated
+        destination name got a fact-checking guard rather than a prompt tweak, because a silent
+        failure or an invented place name is worse for user trust than a slower rollout. I also
+        chose to migrate off mock data one source at a time, flights, then hotels, then
+        activities, then weather, rather than switching everything at once, so any regression
+        could be traced to a single change instead of getting lost in a big-bang cutover.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         Mock data is useful for testing control flow but actively misleading about reliability:

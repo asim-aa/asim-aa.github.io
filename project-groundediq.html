@@ -188,6 +188,20 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        The core product bet was that a business analytics tool is only as good as its worst
+        wrong answer, so every question gets converted into deterministic SQL and Python instead
+        of a free-form LLM response, even though that's more work than just asking the model
+        directly. The guardrail layer exists for the same reason: catching a query that would
+        silently aggregate at the wrong grain matters more than shipping faster. After the
+        initial build, I revisited that priority again for public deployment and demoted the LLM
+        to an optional explanation layer, because a demo that goes dark the moment an external
+        API has an outage isn't something I'd want a recruiter to hit.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         LLM output is most trustworthy when it's constrained to producing something checkable:

@@ -127,6 +127,20 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        Extending an existing char-RNN implementation instead of writing one from scratch was a
+        deliberate call about where to spend limited effort: the interesting question wasn't "can
+        I build an RNN," it's "what does hidden size, depth, and optimizer choice actually cost or
+        buy," and building on a working base let all the effort go into the experimental design
+        instead. That same bias toward evidence over assumption is why I added a seventh run,
+        retraining the best architecture on a different genre, instead of stopping once I had a
+        good perplexity number: a model that only works on the dataset it was tuned for isn't as
+        useful a result.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         Extending someone else's implementation isn't a shortcut around the harder skill, it's a

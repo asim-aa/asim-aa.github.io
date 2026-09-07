@@ -195,6 +195,22 @@
     </div>
 
     <div class="case-block reveal">
+      <h3>Product lens: what I optimized for</h3>
+      <p>
+        Between logistic regression and CatBoost, I picked the one that was easier to calibrate
+        and audit even though it didn't offer a real accuracy edge, because for this application
+        the number a user can trust mattered more than the number that looks marginally better on
+        paper. That same bias toward trustworthiness over top-line performance is why I ran a
+        walk-forward backtest across 8 cutoffs instead of stopping at one train/test split, which
+        is the only reason the 1.7× calibration gap ever surfaced. When I turned the frozen model
+        into a public dashboard, I drew an explicit boundary around it too: every betting-style
+        feature is simulation only, no real money or sportsbook integration anywhere, so the
+        product stays an honest way to compare judgment against a calibrated model rather than
+        something that reads as a wagering tool.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
       <h3>What I'd take into the next project</h3>
       <p>
         A model's average performance and its worst-case performance are different questions, and
