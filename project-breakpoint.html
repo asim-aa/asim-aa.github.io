@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breakpoint | Asim Ahmed</title>
+<meta name="description" content="Case study: an adversarial code-verification system where a Prover and a Skeptic LLM argue over correctness and a real sandboxed subprocess decides, built by Asim Ahmed.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="about.html#contact">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Sep 2026</div>
+    <h1>Breakpoint</h1>
+    <p class="lede">
+      An adversarial code-verification system where two different LLMs argue over correctness and
+      a real sandboxed subprocess, not a third model's opinion, decides who's right.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo: system architecture, adversarial pipeline design, sandbox security engineering</div>
+      <div><span class="case-meta-lbl">Timeline</span>Self-directed project, Sep 2026</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · LangGraph · OpenRouter · Docker · Node.js · SQLite · Flask · pytest · GitHub Actions</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://github.com/asim-aa/breakpoint/blob/main/demo/breakpoint-demo.gif" target="_blank" rel="noopener noreferrer">Watch the demo</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/breakpoint" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        Most "AI writes code" demos verify correctness by asking a language model whether the code
+        <i>looks</i> right. That's judgment layered on judgment, no more reliable than asking a
+        model to grade its own homework, and it fails silently: a same-model self-check will
+        confidently call broken code "correct" because nothing ever actually ran it. I wanted a
+        system where a verdict is never "the model said so." So Breakpoint replaces the opinion
+        with an experiment: a second, genuinely different model tries to break the first model's
+        code with real tests, and those tests execute for real, in an isolated sandbox, with no
+        network access and a hard timeout. Pass or fail is a fact, not a vibe.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Architecture: six stages, one conditional edge</h3>
+      <p>
+        Built as a LangGraph <code>StateGraph</code>: a request flows through six stages, with one
+        retry loop that's what actually makes this a system rather than a straight-line pipeline.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Stage</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td>Framer</td><td>Turns a plain-English request into a formal JSON spec: inputs, output, constraints, examples</td></tr>
+            <tr><td>Prover</td><td>Implements the spec. Retries internally against a real <code>compile()</code> / <code>node --check</code> guard if a reasoning model leaks prose instead of code</td></tr>
+            <tr><td>Skeptic</td><td>A genuinely different model than the Prover, enforced by an <code>assert</code> at runtime, writes adversarial tests aimed at empty input, boundaries, and anything the spec implies but the code might not handle</td></tr>
+            <tr><td>Sandbox</td><td>Executes every test for real, in Docker when available, a bare subprocess otherwise</td></tr>
+            <tr><td>Validator</td><td>Judges whether a failing test is a real bug or itself broken, a free local syntax check first, one LLM call only if that passes</td></tr>
+            <tr><td>Arbiter</td><td>Produces the final verdict, a confidence score, and a persisted SQLite record of every attempt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Every round re-runs <b>every</b> previously-generated test, not just the newest, so a fix
+        can never silently reintroduce a bug that was already caught. The retry loop is bounded by
+        a round budget, so a genuinely hard bug the Prover can't fix in time still produces an
+        honest "unresolved" verdict instead of looping forever.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        A failing test isn't automatically a real bug, and treating it as one nearly broke the
+        system: on one run, the Skeptic wrote a syntactically invalid test (a walrus operator
+        misused inside a bare <code>assert</code>) alongside a mathematically false assertion.
+        Rather than recognizing the test itself was bad, the Prover special-cased the exact failing
+        input instead of fixing the algorithm, and the invalid test then failed identically every
+        round with no way to ever satisfy it, permanently blocking convergence. I built a dedicated
+        Validator node to fix this at the root: a free local syntax check catches broken tests for
+        $0, and anything that compiles but might still be semantically wrong gets one LLM call
+        judging the <i>test</i> against the spec, never the implementation.
+      </p>
+      <p>
+        The sandbox itself went through the same honesty standard. It now runs generated code
+        inside a locked-down Docker container when one's available, no network namespace at all,
+        every Linux capability dropped, a read-only root filesystem, cgroup-enforced memory/CPU
+        limits, and the image pinned by a digest fetched live from the registry, not a bare tag
+        that could be silently republished. When Docker isn't reachable it falls back to a bare
+        subprocess, and every result carries an <code>isolation</code> field so which boundary
+        actually ran is never hidden. Three tests prove the isolation guarantees for real, not just
+        in configuration: a live network call, a filesystem write outside the sandbox, and the
+        process's own uid each fail from <i>inside</i> the sandboxed code, skipped locally where
+        Docker isn't installed but run for real in CI.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Extending it to a second language</h3>
+      <p>
+        The whole pipeline now targets JavaScript as well as Python, not through a parallel
+        implementation but a single <code>language</code> parameter threaded through every node:
+        camelCase spec inference instead of snake_case, a Node-assert test harness instead of
+        pytest-style asserts, and the same Docker-or-subprocess sandbox pointed at a digest-pinned
+        <code>node:20-slim</code> image instead of <code>python:3.12-slim</code>. Run live against a
+        real spec, not just unit-tested against mocks, it produced a correct implementation, 14 real
+        adversarial tests, and a clean convergence, with one test correctly excluded by the Validator
+        for a stray markdown-fence artifact in its own extracted source, exactly the invalid-test
+        class the Validator exists to catch.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results: does the adversary actually catch more than a self-check?</h3>
+      <p>
+        The eval's whole point is a head-to-head: the same Prover code, judged two ways, one round
+        of real adversarial execution versus a same-model self-check that never runs anything.
+      </p>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">190</span><span class="metric-lbl">Automated tests</span></div>
+        <div class="metric"><span class="metric-val mono">13</span><span class="metric-lbl">Real bugs found &amp; fixed live</span></div>
+        <div class="metric"><span class="metric-val mono">2/6</span><span class="metric-lbl">Python: bugs caught, baseline missed both</span></div>
+        <div class="metric"><span class="metric-val mono">2/5</span><span class="metric-lbl">JavaScript: bugs caught, baseline missed both</span></div>
+      </div>
+      <p>
+        In both languages, on the identical problem set, a non-adversarial self-check said
+        "correct" on implementations that real, executed tests proved were buggy, the exact failure
+        mode this project exists to replace. The JavaScript run is honestly missing one problem: the
+        Skeptic model exhausted its retries returning empty content even at an 8,000-token budget, a
+        real, reproducible limitation of that specific free-tier model, not a bug in Breakpoint, and
+        it's documented as a stated gap in the report rather than silently dropped.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Live example: a classic off-by-one, caught blind</h3>
+      <p>
+        I planted a genuine bug in a scratch file with no hint left for the model: a binary search
+        using <code>lo &lt; hi</code> instead of <code>lo &lt;= hi</code>, which silently misses the
+        target whenever the search narrows to exactly one remaining index.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Test</th><th>Verdict</th><th>Why it fails</th></tr></thead>
+          <tbody>
+            <tr><td>Target in the middle</td><td>Pass</td><td>Loop narrows correctly before hitting the edge case</td></tr>
+            <tr><td>Single-element array</td><td>Fail</td><td><code>lo == hi</code> on entry, loop body never runs</td></tr>
+            <tr><td>Target at the last index</td><td>Fail</td><td>Search narrows to exactly that index and exits without checking it</td></tr>
+            <tr><td>Duplicate values at target</td><td>Fail</td><td>Same off-by-one, surfaced through a second boundary shape</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The live Skeptic, working blind, wrote adversarial tests that caught <b>4 real failures</b>,
+        every one a boundary case that specific bug actually breaks, and did it against the real
+        GitHub Action integration end to end, not a synthetic test harness.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Process: finding out where it went wrong</h3>
+      <p>
+        An adversarial LLM pipeline surfaces failure modes a happy-path demo never shows, and I
+        kept every one of them documented rather than quietly patched. Early on, <code>sandbox_node</code>
+        handed the Prover a useless <code>"exited with code 1"</code> on every retry instead of the
+        real traceback, because the error-priority logic never actually fell through to stderr, the
+        Prover was retrying completely blind until I fixed the diagnostic order. The GitHub Action
+        integration crashed on its very first live trigger: verified against mocks but never against
+        a real OpenRouter call, the Skeptic burned its entire token budget on internal reasoning
+        before writing any output, and the per-file loop had no error handling at all, so one bad
+        response took the whole Action down. I widened the retry budget, added a specific retry path
+        for that failure, and gave the loop the same per-file resilience the eval runner already had,
+        then re-triggered it live twice more to confirm the fix, both runs hit a real Nvidia outage
+        and both degraded to a clean skip instead of crashing again.
+      </p>
+      <p>
+        Extending to JavaScript surfaced its own class of bugs: a stray non-string element in the
+        Skeptic's JSON output that crashed extraction outright, a model that ignored the
+        "respond with JSON" instruction entirely and just wrote plain test source, and a reasoning
+        model leaking pure prose into the Prover's code field with no guard to catch it, since
+        Python's <code>compile()</code> check had no JavaScript equivalent yet. Each is fixed and
+        each fix is tested against the real failure that motivated it, not a hypothetical.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Product lens: what I optimized for</h3>
+      <p>
+        Every design decision here traded elegance for legibility about failure. The sandbox always
+        reports which isolation backend actually ran instead of presenting a uniform interface that
+        hides a silent downgrade. The eval runner refuses to overwrite a real, previously-earned
+        report with an empty one, a rule that exists because a same-day retry once did exactly that
+        after hitting a rate limit, caught immediately because the report is treated as data worth
+        protecting, not a disposable log line. And the whole project runs at <b>$0</b>, on free-tier
+        models exclusively, which forced real resilience engineering, quota-aware retries, honest
+        partial reports, graceful degradation on provider outages, that a paid API budget would have
+        let me paper over.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        The most valuable bugs here never showed up in a design review, only running the system
+        against a real provider, a real sandbox, and a second language surfaced them. That's the
+        same lesson underneath the maker/checker split in the Disclosure Verifier: a system that
+        states its own limitations and refuses to fabricate a clean number is more trustworthy than
+        one that looks polished until you actually run it. I'd build the honesty in from the start
+        again, an <code>isolation</code> field, a stated gap in an eval report, a Validator that
+        exists specifically to say "that test doesn't count", rather than add it after the fact.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-disclosure.html">← The Disclosure Verifier</a>
+  <a class="btn btn-ghost" href="project-nba.html">Next: NBA Win-Probability Platform →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

@@ -114,6 +114,62 @@
         </div>
       </article>
 
+      <article class="case-card reveal theme-green" data-cats="featured agents swe">
+        <div class="case-media">
+          <div class="mockup">
+            <div class="mockup-code">
+              <div class="mockup-bar"><i></i><i></i><i></i></div>
+              <pre>$ breakpoint run "binary search a sorted array" --max-rounds 3
+
+<span class="ok">pass</span>    test_finds_target_in_middle
+<span class="bad">FAIL</span>    test_single_element_array
+                <span class="dim">misses exact match when lo == hi</span>
+<span class="bad">FAIL</span>    test_target_at_last_index
+                <span class="dim">same off-by-one, `&lt;=` vs `&lt;`</span>
+
+<span class="dim">Skeptic caught 2 real bugs a same-model self-check called "correct"</span>
+Round 2 → Verdict: converged · Confidence: 1.0
+<span class="dim">190 tests · 13 real bugs found &amp; fixed live · $0/run</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-card-meta">
+            <span class="case-tag">Applied AI &amp; Agents · Software Engineering</span>
+            <span class="case-date mono">Sep 2026</span>
+          </div>
+          <h3>Breakpoint</h3>
+          <p class="case-tagline">Two LLMs argue about your code; a sandboxed subprocess, not a third opinion, decides who's right.</p>
+          <div class="case-role">Multi-agent orchestration · Adversarial system design · Sandbox security engineering</div>
+          <p class="case-desc">
+            An adversarial code-verification system: a Prover implements a spec, a Skeptic on a
+            genuinely different model writes tests aimed at breaking it, and nothing counts as a
+            bug, or a pass, until it actually executes. A Validator node stops an invalid Skeptic
+            test from permanently blocking convergence; a real Docker sandbox
+            (<b>network-none, read-only, non-root, digest-pinned</b>) replaces a bare subprocess
+            whenever it's available, with the active isolation backend always disclosed, never
+            hidden. The identical pipeline now targets <b>JavaScript as well as Python</b>, verified
+            live against real OpenRouter models and a real GitHub Action, not mocks.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="metric-val mono">190</span><span class="metric-lbl">Automated tests</span></div>
+            <div class="metric"><span class="metric-val mono">13</span><span class="metric-lbl">Real bugs found &amp; fixed live</span></div>
+            <div class="metric"><span class="metric-val mono">2</span><span class="metric-lbl">Target languages, Python + JS</span></div>
+            <div class="metric"><span class="metric-val mono">$0</span><span class="metric-lbl">Runtime cost, free-tier only</span></div>
+          </div>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">LangGraph</span><span class="chip">OpenRouter</span>
+            <span class="chip">Docker</span><span class="chip">Node.js</span><span class="chip">SQLite</span>
+            <span class="chip">pytest</span><span class="chip">GitHub Actions</span>
+          </div>
+          <div class="case-actions">
+            <a class="btn btn-primary" href="https://github.com/asim-aa/breakpoint/blob/main/demo/breakpoint-demo.gif" target="_blank" rel="noopener noreferrer">Watch the demo ↗</a>
+            <a class="btn btn-ghost" href="project-breakpoint.html">Read case study →</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/breakpoint" target="_blank" rel="noopener noreferrer">Source ↗</a>
+          </div>
+        </div>
+      </article>
+
       <article class="case-card reveal theme-blue" data-cats="featured ml data-science">
         <div class="case-media">
           <div class="mockup">
