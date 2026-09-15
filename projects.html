@@ -451,6 +451,59 @@ Round 2 → Verdict: converged · Confidence: 1.0
         </div>
       </article>
 
+      <article class="case-card reveal theme-purple" data-cats="agents swe">
+        <div class="case-media">
+          <div class="mockup">
+            <div class="mockup-code">
+              <div class="mockup-bar"><i></i><i></i><i></i></div>
+              <pre>$ mcp-teardown probe --tickers AAPL,TSLA,MSFT,NVDA
+
+<span class="dim">ticker   legacy tag "Revenues"          result</span>
+AAPL     still "valid"                   <span class="bad">silent, 7yr-stale answer</span>
+TSLA     still current                   <span class="ok">correct — this time</span>
+MSFT     retired → missing_fact          <span class="warn">loud failure, blocks progress</span>
+NVDA     still current, correct          <span class="bad">the AAPL/MSFT "fix" is wrong here</span>
+
+<span class="dim">same root cause · 4 tickers · 0 safe universal defaults</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-card-meta">
+            <span class="case-tag">Applied AI &amp; Agents · Software Engineering</span>
+            <span class="case-date mono">PM teardown</span>
+          </div>
+          <h3>MCP Teardown</h3>
+          <p class="case-tagline">The same tool call is silently wrong for Apple, correctly blocked for Microsoft, and inverted for Nvidia — same root cause.</p>
+          <div class="case-role">Platform + AI/ML PM analysis · Live MCP client testing · Tool-schema design</div>
+          <p class="case-desc">
+            A hands-on teardown of the Model Context Protocol, built by extending and re-connecting
+            the Disclosure Verifier's own MCP servers as a live client rather than reading the spec.
+            Four real tickers surfaced the same root cause four different ways — an SEC/XBRL
+            revenue-tag migration that <code>get_xbrl_facts</code> and <code>reconcile_claim</code>
+            have zero protection against; for Apple it fails <b>silently</b>, returning real,
+            well-formed data seven years stale with no error at all. Blends a Platform PM read
+            (docs, errors, versioning, integration friction) and an AI/ML PM read
+            (non-determinism, eval, cost/latency, human-in-the-loop) into <b>one ranked,
+            tradeoff-aware list</b>, not two separate ones.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="metric-val mono">4/4</span><span class="metric-lbl">Tickers hit the same root cause</span></div>
+            <div class="metric"><span class="metric-val mono">7 yrs</span><span class="metric-lbl">How stale a "successful" call was</span></div>
+            <div class="metric"><span class="metric-val mono">3</span><span class="metric-lbl">MCP servers, live-connected</span></div>
+            <div class="metric"><span class="metric-val mono">0</span><span class="metric-lbl">Safe universal tag defaults found</span></div>
+          </div>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">MCP</span><span class="chip">Pydantic</span>
+            <span class="chip">SEC EDGAR &amp; XBRL</span>
+          </div>
+          <div class="case-actions">
+            <a class="btn btn-primary" href="https://claude.ai/artifact/AddFUK1traVhbkE4GtmioY" target="_blank" rel="noopener noreferrer">Read the teardown ↗</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/mcp-teardown" target="_blank" rel="noopener noreferrer">Source ↗</a>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <div class="sec-head wide-top reveal">
