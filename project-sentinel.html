@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="index, follow, noarchive, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Sentinel | Asim Ahmed</title>
+<meta name="description" content="Case study: a reliability engine for AI services that detects failures, diagnoses the causing pipeline stage, and verifies its own fixes, graded by a blind fault-injection eval, built by Asim Ahmed.">
+<meta property="og:title" content="AI Sentinel | Asim Ahmed">
+<meta property="og:description" content="A reliability engine for AI services, graded by a blind fault-injection eval that exposed a bug in its own detector.">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="nav-brand">Asim Ahmed<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="about.html">About</a>
+      <a href="learning.html">Learning Lab</a>
+      <a href="about.html#contact">Contact</a>
+      <a href="resume.html" target="_blank" rel="noopener noreferrer">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head case-head">
+  <div class="wrap">
+    <a class="back-link reveal" href="projects.html">← All projects</a>
+    <div class="eyebrow">Case Study · Sep 2026</div>
+    <h1>AI Sentinel</h1>
+    <p class="lede">
+      A reliability engine for AI services that detects failures, works out which pipeline stage
+      caused them, and verifies its own fixes, graded by a blind fault-injection eval that
+      exposed a bug in its own detector.
+    </p>
+    <div class="case-meta reveal">
+      <div><span class="case-meta-lbl">Role</span>Solo: system design, evaluation design, reliability engineering</div>
+      <div><span class="case-meta-lbl">Timeline</span>Built and hardened over about a week, Sep 2026</div>
+      <div><span class="case-meta-lbl">Stack</span>Python · FastAPI · OpenTelemetry · SQLite · pytest · systemd</div>
+    </div>
+    <div class="cta-row reveal">
+      <a class="btn btn-primary" href="https://github.com/asim-aa/ai-sentinel" target="_blank" rel="noopener noreferrer">Source on GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/asim-aa/ai-sentinel/blob/main/docs/DIAGRAMS.md" target="_blank" rel="noopener noreferrer">Architecture diagrams</a>
+    </div>
+  </div>
+</header>
+
+<section class="case-section">
+  <div class="wrap">
+    <div class="case-block reveal">
+      <h3>Problem</h3>
+      <p>
+        Detecting that an AI service is unhealthy is the easy part: a 503 or a slow p95 will tell
+        you that much. The harder, less-built layer is working out why it degraded and what is
+        safe to do about it. I wanted to build that whole loop end to end (detect, diagnose,
+        remediate, verify, remember), and to test it honestly, because a diagnosis engine that has
+        never been graded against a fault it wasn't told about is just a set of plausible rules.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Approach &amp; architecture</h3>
+      <p>
+        Two processes sharing one SQLite file, with no collector: a small instrumented demo AI
+        service (auth, retrieval, LLM call, and tool call, each an OpenTelemetry span, with a
+        switch that injects real faults) and the engine that watches it. Six threshold detectors
+        compare a 90-second recent window against a 900-second baseline, and a per-stage
+        correlator names which pipeline stage deviates most.
+      </p>
+      <p>
+        Every incident carries a recommended action, but nothing executes until a person clicks
+        it. After an action runs, the system sends probes, compares the incident's own metric
+        before and after, and either marks the fix verified or rolls it back automatically.
+        Verified fixes are stored as fixtures that can be replayed later, so a change that quietly
+        breaks a working fix gets caught. I deliberately did not build an auto-triggering circuit
+        breaker: an action that fires on detection without a human would undercut the
+        co-pilot-not-autopilot design the rest of the system depends on.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Key engineering decisions</h3>
+      <p>
+        The eval is blind: the fault is chosen by the eval and never told to the detection or
+        diagnosis code, which only see spans, exactly as they would for a real incident. Each
+        trial is scored correct, wrong stage, inconclusive, or not detected. I kept a fault type
+        in the pool even while it scored inconclusive on every trial, because it corrupts output
+        text without marking a span as an error and so gave the per-stage comparison nothing to
+        attribute. Excluding it would have made the accuracy look better than the system was; instead
+        the eval quantified the gap and I fixed it.
+      </p>
+      <p>
+        The eval also runs the real, unmodified detection windows, so trials have to be spaced
+        about 100 seconds apart. Back-to-back trials let one trial's clean traffic dilute the next
+        trial's genuine 70% error rate down to about 22%, just under the significance threshold.
+        Narrowing the window for the eval would have tested a different code path than a real
+        incident goes through, so I paid the wall-clock cost instead.
+      </p>
+      <p>
+        A second eval has a real model judge whether each response actually addresses the
+        question. It has no mock fallback: faking semantic judgment would be dishonest, so it
+        raises a clear error when no judge model is configured.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What broke, and what it revealed</h3>
+      <p>
+        A single 5-trial pass scored a perfect 5/5, which I knew was too small to mean much. Run at
+        real scale, 50 trials with 10 per fault type, it scored <b>68%</b>: a clean 10/10 on the
+        three faults whose detectors only read the recent window, but 2/10 on the two that depend
+        on a baseline.
+      </p>
+      <p>
+        The cause was in my own fix for an earlier bug. To stop a long-running fault from aging
+        into its own baseline, the system excludes an open incident's time range from the baseline
+        query. That range ran to "now" with no upper bound, so incidents nobody resolved kept
+        excluding more of the baseline every sweep, until four of them swallowed it entirely and
+        the latency detector went blind to any later fault. A run shorter than about 15 minutes
+        can't hit this, which is why the small pass never saw it.
+      </p>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Layer</th><th>What it still got wrong</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>Unbounded exclusion</td><td>Stale open incidents emptied the baseline permanently</td><td>Cap the range at the lookback window</td></tr>
+            <tr><td>Still excluded clean traffic</td><td>An open incident excluded all the clean traffic after its fault, leaving an ~8-minute blind spot per incident</td><td>Record when each incident's detector was last seen firing, and end the range there</td></tr>
+            <tr><td>Never re-fired</td><td>An incident created just as its fault aged out of the window had no last-seen time and fell back to a ~17-minute range (0 baseline samples, against 99 without it)</td><td>Start the last-seen time at creation</td></tr>
+            <tr><td>Resolved late</td><td>Resolving stamps the current time, so resolving an old incident, or bulk-clearing stale ones, blinded the detector for the next ~16 minutes</td><td>End a resolved incident's range at the earlier of resolution and last-seen</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Each layer was only visible after fixing the one before it, and I confirmed each by
+        re-running the same eval, or, for the last one, noticed it while cleaning up after the runs.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Results</h3>
+      <div class="metrics">
+        <div class="metric"><span class="metric-val mono">68% → 98%</span><span class="metric-lbl">Blind eval, four 50-trial runs</span></div>
+        <div class="metric"><span class="metric-val mono">6</span><span class="metric-lbl">Failure detectors</span></div>
+        <div class="metric"><span class="metric-val mono">138</span><span class="metric-lbl">Automated tests</span></div>
+      </div>
+      <div class="evidence-table-wrap">
+        <table class="evidence-table">
+          <thead><tr><th>Run</th><th>Fix applied before it</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>None</td><td>68% (34/50)</td></tr>
+            <tr><td>2</td><td>Capped the exclusion</td><td>84% (42/50)</td></tr>
+            <tr><td>3</td><td>Last-seen tracking</td><td>96% (48/50)</td></tr>
+            <tr><td>4</td><td>Last-seen starts at creation</td><td>98% (49/50)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Two caveats belong next to that number. It is not a held-out estimate, since each fix
+        targeted the previous run's misses, and 49/50 is consistent with a true accuracy anywhere
+        from about 90% to 100%. The one remaining miss is a low-error-rate case where only 2 of 6
+        probes errored: the detector fired but attributing a stage isn't significant at that rate,
+        which is a sensitivity limit of the diagnosis that I left as it is.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I haven't verified</h3>
+      <p>
+        It watches one demo service with threshold detectors, not anomaly-detection models. The
+        Claude and OpenAI failover paths, the LLM judge, and an OpenAI-compatible backend I added
+        are tested with mocked SDK calls only; no live provider call has run, and the README says
+        so. It runs locally with one command and persistently on a shared GPU cluster (user-level
+        systemd, no sudo), but there is no public live demo.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>Product lens: what I prioritized</h3>
+      <p>
+        I prioritized being able to trust the system over making it look impressive. "Verified"
+        means real post-action traffic confirmed the metric recovered, and if it didn't, the
+        system reverts itself and says so. I reported the eval's failures instead of dropping the
+        faults it failed on, and kept the caveats next to the headline number, because a
+        reliability tool that overstates its own accuracy defeats its purpose.
+      </p>
+    </div>
+
+    <div class="case-block reveal">
+      <h3>What I'd take into the next project</h3>
+      <p>
+        A passing small eval is a claim about the eval, not the system: the failure modes lived at
+        a scale the first pass never reached. I now run an eval at the size where failures show up,
+        re-run it after every fix because each fix can expose the next layer, and write down what
+        the number does and doesn't prove before anyone else has to ask.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="case-nav wrap reveal">
+  <a class="btn btn-ghost" href="project-disclosure.html">← The Disclosure Verifier</a>
+  <a class="btn btn-ghost" href="projects.html">All projects →</a>
+</div>
+
+<footer>
+  <div class="wrap mono">Asim Ahmed · San Diego, CA</div>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

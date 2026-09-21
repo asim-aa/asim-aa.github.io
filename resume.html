@@ -78,6 +78,18 @@
 
   <div class="proj">
     <div class="row">
+      <span class="proj-name">AI Sentinel</span>
+      <span class="when">Sep. 2026</span>
+    </div>
+    <div class="stack">Python, FastAPI, OpenTelemetry, SQLite, pytest, systemd</div>
+    <ul>
+      <li><span class="lead">Built a reliability engine for AI services</span> that detects failures against a rolling baseline, diagnoses the causing pipeline stage, and verifies each one-click fix on real traffic with automatic rollback, with verified fixes replayed as regression tests; deployed persistently on a shared GPU cluster behind 138 automated tests.</li>
+      <li><span class="lead">Designed a blind fault-injection eval that exposed a baseline-exclusion bug</span> (68% diagnosis accuracy at full scale), then re-ran it after each of four fixes to reach 98% (49/50 trials; tuned on the same eval, not a held-out estimate).</li>
+    </ul>
+  </div>
+
+  <div class="proj">
+    <div class="row">
       <span class="proj-name">NBA Win-Probability Prediction Platform</span>
       <span class="when">Aug. 2026</span>
     </div>

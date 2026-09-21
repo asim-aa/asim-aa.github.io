@@ -114,6 +114,57 @@
         </div>
       </article>
 
+      <article class="case-card reveal theme-blue" data-cats="featured agents swe">
+        <div class="case-media">
+          <div class="mockup">
+            <div class="mockup-code">
+              <div class="mockup-bar"><i></i><i></i><i></i></div>
+              <pre><span class="dim">blind fault-injection eval · 50 trials per run</span>
+
+run 1   <span class="bad">68%</span>   <span class="dim">baseline exclusion had no upper bound</span>
+run 2   <span class="warn">84%</span>   <span class="dim">capped it</span>
+run 3   <span class="ok">96%</span>   <span class="dim">tracked when each fault was last seen</span>
+run 4   <span class="ok">98%</span>   <span class="dim">last-seen starts at creation</span>
+
+<span class="dim">6 detectors · 138 tests · not a held-out estimate</span></pre>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-card-meta">
+            <span class="case-tag">Applied AI &amp; Agents · Software Engineering</span>
+            <span class="case-date mono">Sep 2026</span>
+          </div>
+          <h3>AI Sentinel</h3>
+          <p class="case-tagline">It doesn't just flag failures, it grades its own diagnosis against faults it wasn't told about.</p>
+          <div class="case-role">Reliability engineering · Evaluation design · Observability</div>
+          <p class="case-desc">
+            A reliability engine for AI services. OpenTelemetry spans feed six threshold detectors, a
+            per-stage correlator names the pipeline stage that caused a failure, and every one-click fix
+            is verified on real traffic and rolled back automatically if it didn't help. A
+            <b>blind fault-injection eval</b> withholds the injected fault from the diagnosis code. At
+            full scale it scored <b>68%</b> and exposed a bug in the system's own baseline logic; four
+            fix-and-rerun passes brought it to <b>98%</b>, with the caveats stated: tuned on the same
+            eval, not a held-out estimate.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="metric-val mono">68% → 98%</span><span class="metric-lbl">Blind eval, 4 runs (not held-out)</span></div>
+            <div class="metric"><span class="metric-val mono">4</span><span class="metric-lbl">Fix passes to close one bug</span></div>
+            <div class="metric"><span class="metric-val mono">6</span><span class="metric-lbl">Failure detectors</span></div>
+            <div class="metric"><span class="metric-val mono">138</span><span class="metric-lbl">Automated tests</span></div>
+          </div>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">OpenTelemetry</span>
+            <span class="chip">SQLite</span><span class="chip">pytest</span><span class="chip">systemd</span>
+          </div>
+          <div class="case-actions">
+            <a class="btn btn-primary" href="project-sentinel.html">Read case study →</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/ai-sentinel/blob/main/docs/DIAGRAMS.md" target="_blank" rel="noopener noreferrer">Diagrams ↗</a>
+            <a class="btn btn-ghost" href="https://github.com/asim-aa/ai-sentinel" target="_blank" rel="noopener noreferrer">Source ↗</a>
+          </div>
+        </div>
+      </article>
+
       <article class="case-card reveal theme-green" data-cats="featured agents swe">
         <div class="case-media">
           <div class="mockup">
