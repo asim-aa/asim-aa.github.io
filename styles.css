@@ -700,3 +700,14 @@
   @media(prefers-reduced-motion:reduce){
     .cursor-dot,.cursor-ring{transition:opacity .2s ease}
   }
+
+  /* ---------- keyboard focus ---------- */
+  :focus{outline:none}
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  .btn:focus-visible,.filter-btn:focus-visible,.theme-toggle:focus-visible,.nav-toggle:focus-visible{
+    outline-offset:2px;
+  }
