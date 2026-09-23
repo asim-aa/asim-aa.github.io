@@ -72,7 +72,7 @@
   .nav-links{display:flex;gap:26px;font-size:14px;color:var(--text-dim)}
   .nav-links a{transition:color .2s}
   .nav-links a:hover{color:var(--text)}
-  @media(max-width:980px){.nav-links{display:none}}
+  @media(max-width:680px){.nav-links{display:none}}
 
   /* ---------- hero ---------- */
   header{
@@ -513,7 +513,7 @@
     padding:6px;cursor:pointer;
   }
   .nav-toggle span{width:20px;height:2px;background:var(--text-dim);border-radius:2px;transition:transform .2s,opacity .2s}
-  @media(max-width:980px){
+  @media(max-width:680px){
     .nav-toggle{display:flex}
     .nav-links{
       display:none;position:absolute;top:100%;left:0;right:0;
@@ -711,21 +711,3 @@
   .btn:focus-visible,.filter-btn:focus-visible,.theme-toggle:focus-visible,.nav-toggle:focus-visible{
     outline-offset:2px;
   }
-
-/* ---------- teaching programming portfolio ---------- */
-.teaching-course{color:var(--accent);font-size:15px;font-weight:600;margin-bottom:16px}
-.teaching-intro{max-width:70ch;color:var(--text-dim);font-size:16px}
-.teaching-intro + .teaching-intro{margin-top:14px}
-.teaching-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.teaching-card{min-width:0;padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-card)}
-.teaching-card h3{font-size:20px;letter-spacing:-.02em;margin-bottom:8px}
-.teaching-card p{color:var(--text-dim);font-size:15px;overflow-wrap:anywhere}
-.teaching-meta{color:var(--accent);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
-.teaching-thumb{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:18px}
-.teaching-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.teaching-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft)}
-.teaching-links a{color:var(--accent);font-size:14px;font-weight:500}
-.teaching-links a:hover{text-decoration:underline}
-.teaching-empty{padding:30px;border:1px dashed var(--line);border-radius:var(--radius);color:var(--text-dim);background:var(--bg-soft);font-size:15px}
-.teaching-video{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;margin-bottom:16px}
-@media(max-width:680px){.teaching-grid{grid-template-columns:1fr}.teaching-card{padding:22px}}
