@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; frame-src 'self'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="index, follow, noarchive, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,108 +22,13 @@
 
 <div class="toolbar">
   <a href="index.html">← Portfolio</a>
-  <button id="print-btn" type="button">Download as PDF</button>
+  <a class="primary" href="Asim_Ahmed_Resume.pdf" download>Download PDF</a>
 </div>
 
-<div class="page">
+<main class="pdf-wrap">
+  <iframe class="pdf-frame" src="Asim_Ahmed_Resume.pdf#view=FitH&amp;toolbar=0" title="Asim Ahmed résumé (PDF)"></iframe>
+  <p class="pdf-fallback">Can't see the résumé above? <a href="Asim_Ahmed_Resume.pdf">Open the PDF directly</a>.</p>
+</main>
 
-  <div class="name">Asim Ahmed</div>
-  <div class="tagline">Machine Learning, Data Science &amp; AI</div>
-  <div class="contact">
-    <span>San Francisco, CA</span><span class="sep">|</span>
-    <span><a href="mailto:asa009@ucsd.edu">asa009@ucsd.edu</a></span><span class="sep">|</span>
-    <span><a href="https://github.com/asim-aa">github.com/asim-aa</a></span><span class="sep">|</span>
-    <span><a href="https://www.linkedin.com/in/asim-ahmed-129450365/">LinkedIn</a></span>
-  </div>
-
-  <h2>Education</h2>
-  <div class="edu-block">
-    <div class="row">
-      <span class="org">University of California, San Diego</span>
-      <span class="when">Expected Mar. 2027</span>
-    </div>
-    <div class="sub">
-      <span>B.S. Mathematics–Computer Science, Minor in Cognitive Science</span>
-      <span class="provost">Provost Honors, Spring 2025</span>
-    </div>
-    <div class="course">
-      <b>Relevant Coursework:</b> Advanced ML Methods, Supervised ML, Artificial Intelligence, Statistical NLP, Probability
-    </div>
-  </div>
-
-  <h2>Experience</h2>
-  <div class="edu-block">
-    <div class="row">
-      <span class="org">SupportVectors</span>
-      <span class="when">Jun. – Aug. 2026</span>
-    </div>
-    <div class="sub"><span>AI Agents &amp; Fine-Tuning Cohort</span></div>
-    <div class="course">
-      Completed an applied program covering LLM agents, MCP tooling, DSPy optimization, and
-      parameter-efficient fine-tuning; capstone: <b>The Disclosure Verifier</b> (below).
-    </div>
-  </div>
-
-  <h2>Technical Skills</h2>
-  <div class="skill-row"><span class="skill-key">Languages</span><span class="skill-val">Python, SQL</span></div>
-  <div class="skill-row"><span class="skill-key">Machine Learning &amp; Data</span><span class="skill-val">scikit-learn, PyTorch, CatBoost, pandas, NumPy, Conformal Prediction</span></div>
-  <div class="skill-row"><span class="skill-key">Generative AI</span><span class="skill-val">DSPy, MCP, LangGraph, Unsloth/QLoRA, GRPO/RLVR</span></div>
-  <div class="skill-row"><span class="skill-key">Engineering</span><span class="skill-val">FastAPI, Streamlit, Git, GitHub Actions, pytest</span></div>
-
-  <h2>Projects</h2>
-
-  <div class="proj">
-    <div class="row">
-      <span class="proj-name">The Disclosure Verifier</span>
-      <span class="when">Aug. 2026</span>
-    </div>
-    <div class="stack">Python, DSPy, MCP, Unsloth/QLoRA, GRPO (Hugging Face TRL), SEC EDGAR &amp; XBRL, pytest, GitHub Actions</div>
-    <ul>
-      <li><span class="lead">Built an agentic SEC verification system with three MCP tool servers and a DSPy-optimized ChainOfThought extractor</span>, adding budgeted checkpoint/resume orchestration and QLoRA/GRPO (Hugging Face TRL) fine-tuning of Qwen2.5-7B-Instruct on a single RTX 4090.</li>
-      <li><span class="lead">Correctly flagged 118 of 122 (96.7%) real SEC restatement instances as inconsistent</span>, backtesting against 13,827 real SEC restatement fingerprints across 541 companies using only data that existed before each restatement happened, at a projected cost of $11.31 to scan every S&amp;P 500 company's full annual 10-K.</li>
-      <li><span class="lead">Raised extraction F1 from 0.730 to 0.784 via DSPy optimization, then cut the false-consistent rate from 0.148 to 0.036 via RLVR/GRPO fine-tuning</span> (accuracy 0.766 → 0.855); validated the deterministic reconciler against a naive LLM-only judge, winning 15/15 adversarial cases with zero false positives, backed by 260 automated tests.</li>
-    </ul>
-  </div>
-
-  <div class="proj">
-    <div class="row">
-      <span class="proj-name">AI Sentinel</span>
-      <span class="when">Sep. 2026</span>
-    </div>
-    <div class="stack">Python, FastAPI, OpenTelemetry, SQLite, pytest, systemd</div>
-    <ul>
-      <li><span class="lead">Built a reliability engine for AI services</span> that detects failures against a rolling baseline, diagnoses the causing pipeline stage, and verifies each one-click fix on real traffic with automatic rollback, with verified fixes replayed as regression tests; deployed persistently on a shared GPU cluster behind 138 automated tests.</li>
-      <li><span class="lead">Designed a blind fault-injection eval that exposed a baseline-exclusion bug</span> (68% diagnosis accuracy at full scale), then re-ran it after each of four fixes to reach 98% (49/50 trials; tuned on the same eval, not a held-out estimate).</li>
-    </ul>
-  </div>
-
-  <div class="proj">
-    <div class="row">
-      <span class="proj-name">NBA Win-Probability Prediction Platform</span>
-      <span class="when">Aug. 2026</span>
-    </div>
-    <div class="stack">Python, pandas, scikit-learn, CatBoost, FastAPI, Streamlit, SQLite, pytest, Ruff, GitHub Actions</div>
-    <ul>
-      <li><span class="lead">Reached 0.738 ROC-AUC and 67.8% accuracy on a frozen 2,460-game test set</span>, building an 11-season pipeline with chronological splitting, a custom Elo engine, and a leakage-safe roster-continuity feature proxying player injuries from game logs; selected logistic regression over CatBoost.</li>
-      <li><span class="lead">Shipped to production behind 312 automated tests</span>, deploying a FastAPI prediction service and Streamlit pick-the-winner dashboard on a shared feature-computation layer across training and inference, with a scheduled GitHub Actions pipeline keeping live features current.</li>
-      <li><span class="lead">Surfaced a 1.7× calibration-error gap</span> between back-to-back and rested games, hidden by the aggregate accuracy number, via a walk-forward backtest across 8 season cutoffs and a live calibration monitor scoring real user picks against the frozen model.</li>
-    </ul>
-  </div>
-
-  <div class="proj">
-    <div class="row">
-      <span class="proj-name">Multi-Agent Vacation Planner</span>
-      <span class="when">Aug. 2026</span>
-    </div>
-    <div class="stack">Python, LangGraph, Streamlit, OpenAI SDK, pytest, GitHub Actions</div>
-    <ul>
-      <li><span class="lead">Migrated a mock-data prototype to four live, keyless data sources at zero API cost</span>, architecting a LangGraph system with parallel flight/activity search, a budget-dependent sequential hotel stage, and a final itinerary compiler.</li>
-      <li><span class="lead">Diagnosed and patched a parsing bug</span> in a third-party scraping library that silently discarded valid results, and built an offline airport-disambiguation resolver with a hub-connection fallback for routes with no direct itinerary.</li>
-      <li><span class="lead">Cut repeat search latency from 1.15s to 0.00s</span> with a TTL cache, and built a fact-checking guard that cross-references LLM-generated recommendations against ground-truth data to prevent hallucinated place names; backed by 102 automated tests, CI via GitHub Actions, and a public Streamlit Community Cloud deployment.</li>
-    </ul>
-  </div>
-
-</div>
-<script src="resume.js" defer></script>
 </body>
 </html>
