@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Claude Code local files
+.claude/settings.local.json
+.claude/worktrees/
+
+# LaTeX build output (the résumé PDF itself is tracked)
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Env / secrets
+.env
+.env.*
